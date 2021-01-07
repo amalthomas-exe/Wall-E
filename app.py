@@ -10,7 +10,7 @@ def home():
 
 @app.route("/get")
 def get_bot_response():
-    #functions to be defined below this line
+    ##functions to be defined below this line
     userText = request.args.get('msg')
     return "Desktop Assistant is under development. Please try again later"
     
