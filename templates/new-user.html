@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New User</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/new-user.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+</head>
+<body>
+    <div id="container">
+        <p id="title">Hey, we see that you are a new user. Please provide us a few details before we proceed.😊</p>
+        <div id="form-box">
+            <form id="user-data" action="/success" method="post">
+                <label class = "label" id="label-name-first" for="first-name">First Name</label><br>
+                <input class = "text-box" type="text" id="first-name" name="first-name" placeholder="Enter your first name:" required><br>
+                <label class="label" id="label-name-last" for="last-name">Last Name</label><br>
+                <input class="text-box" type="text" id="last-name" name = "last-name" placeholder="Enter your last name: " required><br>
+                <label class="label" id="label-email" for="email-id">Email-id</label><br>
+                <input class="text-box" id="label-email" type="email" name="email-id" placeholder="Enter you email-id" required><br>
+                <button class="btn-submit" id="submit" type="submit">Submit<i id="plane" class="fas fa-paper-plane"></i></button>
+                
+            </form>
+        </div>
+    </div>
+</body>
+</html>

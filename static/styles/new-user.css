@@ -1,0 +1,65 @@
+:root{
+    font-family: 'Roboto', sans-serif;
+    background-image: url("https://miro.medium.com/max/3200/1*Sdckr5tAt5peOaZJgsAQ1Q.png");
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-position: left;
+}
+
+#container{
+    width: 45% auto;
+}
+#title{
+    font-size:45px;
+    text-align: center;
+    border-radius: 13px;
+    margin-left: 10%;
+    margin-right: 10%;
+    background-color: lightsalmon;
+    opacity: 0.9;
+    font-style: normal;
+}
+#form-box{
+    border-radius: 20px;
+    margin-right: 20%;
+    margin-left: 20%;
+    align-items: center;
+    background-color: lightpink;
+    opacity: 0.9;
+}
+#user-data{
+    text-align: left;
+}
+.text-box{
+    text-align: center;
+    width: 70%;
+    height:2.25em;
+    margin-left: 30px;
+    margin-bottom: 30px;
+    font-size: 20px;
+    border-radius: 7px;
+}
+.label{
+    margin-left: 30px;
+    font-size:30px;
+    margin-top: 257px;
+    padding-top: 200px;
+}
+#submit{
+    text-align: center;
+    width:40%;
+    height:45px;
+    margin-left: 25%;
+    margin-right: 23%;
+    border-radius: 5px;
+    background-color: lightseagreen;
+    font-size: 20px;
+    cursor: pointer;
+}
+#submit:hover{
+    background-color:royalblue;
+    color: white;
+}
+#submit:hover > i{
+    transform: translateX(10px);
+}
