@@ -72,7 +72,7 @@ def get_bot_response():
             bot_response.pop()
             return random.choice(["Got it! The mail has been sent 👍","The message has been sent 👍","Mail send 👍"])
         except:
-            return 'Oops! Looks like I\'m unable to send the mail because Google is blocking me fron doing so. Please go to <a href="https://www.google.com/settings/security/lesssecureapps">this link</a> to allow me to send mails'  
+            return 'Oops! Looks like I\'m unable to send the mail because Google is blocking me from doing so. Please go to <a href="https://www.google.com/settings/security/lesssecureapps">this link</a> to allow me to send mails'  
     
 
         
