@@ -5,6 +5,8 @@ import random
 import webbrowser
 from datetime import datetime
 import yagmail
+from email_validator import validate_email, EmailNotValidError
+
 now = datetime.now()
 now2 = now.strftime("%H:%M")
 user_commands = []
@@ -56,12 +58,17 @@ def get_bot_response():
     lst = userText.split(" ")
     for i in lst:
         if ("mail" or "email" or "message") in userText and "@" in userText:
-            bot_response.append("mail-with-id")
             for i in lst:
                 if "@" in i:
                     global mail_addr
                     mail_addr=i
-            return random.choice(["Please specify the message","What is the message?","What will be the message?"])
+                    try:
+                        valid = validate_email(mail_addr)
+                        mail_addr = valid.email
+                        bot_response.append("mail-with-id")
+                        return random.choice(["Please specify the message","What is the message?","What will be the message?"])
+                    except:
+                        return "Looks like the provided mail id is not valid. Please check the mail id you have provided. "
         elif ("mail" or "email") in i.lower():
             bot_response.append("mail-without-id")
             return random.choice(["Please specify a mail-id","Please mention the mail-id of the recipient."])
@@ -69,7 +76,7 @@ def get_bot_response():
         mailer = yagmail.SMTP(dict["email"],dict["password"])
         try:
             mailer.send(mail_addr,"Message from "+dict["first-name"],userText)
-            bot_response.pop()
+            bot_response.clear()
             return random.choice(["Got it! The mail has been sent 👍","The message has been sent 👍","Mail send 👍"])
         except:
             return 'Oops! Looks like I\'m unable to send the mail because Google is blocking me from doing so. Please go to <a href="https://www.google.com/settings/security/lesssecureapps">this link</a> to allow me to send mails'  
