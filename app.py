@@ -131,7 +131,7 @@ def get_bot_response():
         return f"Todo named {todo} added successfully into the database!"
     
     elif 'delete a todo' or "complete a todo" in userText:
-        todo = userText.replace("add a todo", "").lstrip()
+        todo = userText.replace("delete a todo", "").lstrip()
         conn = sqlite3.connect("todos.db")
         c = conn.cursor()
         c.execute("CREATE TABLE IF NOT EXISTS todos (todo text)")
