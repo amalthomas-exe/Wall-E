@@ -8,9 +8,9 @@ import yagmail
 from email_validator import validate_email, EmailNotValidError
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import wikipedia
 
-now = datetime.now()
-now2 = now.strftime("%H:%M")
+now = datetime.now().strftime("%H:%M")
 user_commands = []
 bot_response = []
 app = Flask(__name__)
@@ -23,7 +23,8 @@ def home():
         f=open("data\\user-data.dat","rb")
         global dict
         dict = pickle.load(f)
-        return render_template("index.html",time = now2,User = dict["first-name"])
+        return render_template("index.html",time = now,User = dict["first-name"])
+        
     except:
         global f1
         f1 = open("data\\user-data.dat","wb")
@@ -31,6 +32,7 @@ def home():
         dict1 = {}
         print("file created")
         return render_template("new-user.html")
+
 
 @app.route("/success",methods = ["POST"])
 def success():
@@ -50,14 +52,16 @@ def success():
     global dict
     dict = pickle.load(f)
     print("Done")
-    return render_template("index.html",time = now2,User = dict["first-name"])
+    return render_template("index.html",time = now,User = dict["first-name"])
 
 
 @app.route("/get")
 def get_bot_response():
     ##functions to be defined below this line
-    userText = request.args.get('msg')
+
+    userText = request.args.get('msg').lower()
     lst = userText.split(" ")
+
     for i in lst:
         if ("mail" or "email" or "message") in userText and "@" in userText:
             for i in lst:
@@ -69,11 +73,15 @@ def get_bot_response():
                         mail_addr = valid.email
                         bot_response.append("mail-with-id")
                         return random.choice(["Please specify the message","What is the message?","What will be the message?"])
-                    except:
+
+                    except Exception as e:
+                        print(e)
                         return "Looks like the provided mail id is not valid. Please check the mail id you have provided. "
+
         elif ("mail" or "email") in i.lower():
             bot_response.append("mail-without-id")
             return random.choice(["Please specify a mail-id","Please mention the mail-id of the recipient."])
+
     if bot_response!=[] and bot_response[-1]=="mail-with-id":
         mailer = yagmail.SMTP(dict["email"],dict["password"])
         try:
@@ -81,7 +89,9 @@ def get_bot_response():
             bot_response.clear()
             return random.choice(["Got it! The mail has been sent 👍","The message has been sent 👍","Mail send 👍"])
         except:
-            return 'Oops! Looks like I\'m unable to send the mail because Google is blocking me from doing so. Please go to <a href="https://www.google.com/settings/security/lesssecureapps">this link</a> to allow me to send mails'  
+            return 'Oops! Looks like I\'m unable to send the mail because Google is blocking me from doing so. Please go to <a href="https://www.google.com/settings/security/lesssecureapps">this link</a> to allow me to send mails'
+
+
     elif "news" in userText:     #Data scraping from a google
         news_url = "https://news.google.com/news/rss"
         Client = urlopen(news_url)
@@ -94,6 +104,10 @@ def get_bot_response():
             news = news + "\n" + news.title.text
         return news
     
+    elif "wikipedia" in userText:
+        query = userText.replace("wikipedia", "").lstrip()
+        summary = wikipedia.summary(query, sentences = 3)
+        return summary
 
 if __name__ == "__main__":
     app.run()
