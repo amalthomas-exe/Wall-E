@@ -91,7 +91,7 @@ def get_bot_response():
         news_list = soup_page.findAll("item")
         news = "Here are some news"
         for news in news_list[:3]:
-            news = news + "\n" + (news.title.text)
+            news = news + "\n" + news.title.text
         return news
     
 
