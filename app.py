@@ -89,7 +89,6 @@ def get_bot_response():
         Client.close()
         soup_page = BeautifulSoup(xml_page, "html.parser")
         news_list = soup_page.findAll("item")
-        send("Here are top 3 news")
         news = "Here are some news"
         for news in news_list[:3]:
             news = news + "\n" + (news.title.text)
