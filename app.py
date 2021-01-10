@@ -10,6 +10,7 @@ from email_validator import validate_email, EmailNotValidError
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import wikipedia
+import sqlite3
 
 now = datetime.now().strftime("%H:%M")
 user_commands = []
@@ -118,6 +119,30 @@ def get_bot_response():
         if len(playables) == 0:
             return f"Found no audio file in {music_directory}. Try changing the directory or add some songs into it."
         os.startfile(random.choice(playables))
+
+    elif "add a todo" in userText:
+        todo = userText.replace("add a todo", "").lstrip()
+        conn = sqlite3.connect("todos.db")
+        c = conn.cursor()
+        c.execute("CREATE TABLE IF NOT EXISTS todos (todo text)")
+        c.execute("INSERT INTO todos VALUES (:todo)", {"todo":todo})
+        conn.commit()
+        conn.close()
+        return f"Todo named {todo} added successfully into the database!"
+    
+    elif 'delete a todo' or "complete a todo" in userText:
+        todo = userText.replace("add a todo", "").lstrip()
+        conn = sqlite3.connect("todos.db")
+        c = conn.cursor()
+        c.execute("CREATE TABLE IF NOT EXISTS todos (todo text)")
+        c.execute("SELECT * FROM todos WHERE todo = :todo", {"todo":todo})
+        if len(c.fetchall()) == 0:
+            return f"No todo named {todo} found in the database!"
+
+        c.execute("DELETE FROM todos WHERE todo = :todo", {"todo":todo})
+        conn.commit()
+        conn.close()
+        return f"Todo named {todo} deleted successfully from the database!"
 
 if __name__ == "__main__":
     app.run()
