@@ -123,18 +123,19 @@ def get_bot_response():
     elif "add a todo" in userText:
         todo = userText.replace("add a todo", "").lstrip()
         conn = sqlite3.connect("todos.db")
+        date = datetime.now().strftime("%d/%m/%Y")
         c = conn.cursor()
-        c.execute("CREATE TABLE IF NOT EXISTS todos (todo text)")
-        c.execute("INSERT INTO todos VALUES (:todo)", {"todo":todo})
+        c.execute("CREATE TABLE IF NOT EXISTS todos (todo text, date text)")
+        c.execute("INSERT INTO todos VALUES (:todo, :date)", {"todo":todo, "date":date})
         conn.commit()
         conn.close()
         return f"Todo named {todo} added successfully into the database!"
     
     elif 'delete a todo' or "complete a todo" in userText:
-        todo = userText.replace("delete a todo", "").lstrip()
+        todo = userText.replace("delete a todo", "").replace("complete a todo", '').lstrip()
         conn = sqlite3.connect("todos.db")
         c = conn.cursor()
-        c.execute("CREATE TABLE IF NOT EXISTS todos (todo text)")
+        c.execute("CREATE TABLE IF NOT EXISTS todos (todo text, date text)")
         c.execute("SELECT * FROM todos WHERE todo = :todo", {"todo":todo})
         if len(c.fetchall()) == 0:
             return f"No todo named {todo} found in the database!"
@@ -143,6 +144,17 @@ def get_bot_response():
         conn.commit()
         conn.close()
         return f"Todo named {todo} deleted successfully from the database!"
+
+    elif "view todos" in userText:
+        conn = sqlite3.connect("todos.db")
+        c = conn.cursor()
+        c.execute("SELECT * FROM todos")
+        data = "Here are all the todos you've added:\n"
+        for i in c.fetchall():
+            todo = i[0]
+            date = i[1]
+            data += f"{todo} - {date}\n"
+        return data
 
 if __name__ == "__main__":
     app.run()
