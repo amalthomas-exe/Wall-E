@@ -7,6 +7,7 @@ from datetime import datetime
 import yagmail
 from email_validator import validate_email, EmailNotValidError
 from urllib.request import urlopen
+from bs4 import BeautifulSoup
 
 now = datetime.now()
 now2 = now.strftime("%H:%M")
@@ -73,7 +74,7 @@ def get_bot_response():
         elif ("mail" or "email") in i.lower():
             bot_response.append("mail-without-id")
             return random.choice(["Please specify a mail-id","Please mention the mail-id of the recipient."])
-    if bot_response[-1]=="mail-with-id":
+    if bot_response!=[] and bot_response[-1]=="mail-with-id":
         mailer = yagmail.SMTP(dict["email"],dict["password"])
         try:
             mailer.send(mail_addr,"Message from "+dict["first-name"],userText)
@@ -81,8 +82,7 @@ def get_bot_response():
             return random.choice(["Got it! The mail has been sent 👍","The message has been sent 👍","Mail send 👍"])
         except:
             return 'Oops! Looks like I\'m unable to send the mail because Google is blocking me from doing so. Please go to <a href="https://www.google.com/settings/security/lesssecureapps">this link</a> to allow me to send mails'  
-    
-     if "news" in userText:     #Data scraping from a google
+    elif "news" in userText:     #Data scraping from a google
         news_url = "https://news.google.com/news/rss"
         Client = urlopen(news_url)
         xml_page = Client.read()
@@ -94,7 +94,6 @@ def get_bot_response():
         for news in news_list[:3]:
             news = news + "\n" + (news.title.text)
         return news
-        
     
 
 if __name__ == "__main__":
