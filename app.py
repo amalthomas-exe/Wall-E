@@ -6,6 +6,7 @@ import webbrowser
 from datetime import datetime
 import yagmail
 from email_validator import validate_email, EmailNotValidError
+from urllib.request import urlopen
 
 now = datetime.now()
 now2 = now.strftime("%H:%M")
@@ -81,7 +82,18 @@ def get_bot_response():
         except:
             return 'Oops! Looks like I\'m unable to send the mail because Google is blocking me from doing so. Please go to <a href="https://www.google.com/settings/security/lesssecureapps">this link</a> to allow me to send mails'  
     
-
+     if "news" in userText:     #Data scraping from a google
+        news_url = "https://news.google.com/news/rss"
+        Client = urlopen(news_url)
+        xml_page = Client.read()
+        Client.close()
+        soup_page = BeautifulSoup(xml_page, "html.parser")
+        news_list = soup_page.findAll("item")
+        send("Here are top 3 news")
+        news = "Here are some news"
+        for news in news_list[:3]:
+            news = news + "\n" + (news.title.text)
+        return news
         
     
 
