@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request
 import wolframalpha
 import pickle
@@ -108,6 +109,15 @@ def get_bot_response():
         query = userText.replace("wikipedia", "").lstrip()
         summary = wikipedia.summary(query, sentences = 3)
         return summary
+
+    elif "play music" in userText:
+        music_directory = ""
+        music_ext = ["mp3", "wav", "ogg"]
+        playables = [i for i in os.listdir(music_directory) if i.split(".")[-1] in music_ext]
+
+        if len(playables) == 0:
+            return f"Found no audio file in {music_directory}. Try changing the directory or add some songs into it."
+        os.startfile(random.choice(playables))
 
 if __name__ == "__main__":
     app.run()
