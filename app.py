@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request
 import wolframalpha
+import pywhatkit
 import pickle
 import random
 import webbrowser
@@ -11,11 +12,17 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import wikipedia
 import sqlite3
-
+now = datetime.now()
+now2 = now.strftime("%H:%M")
 now = datetime.now().strftime("%H:%M")
 user_commands = []
 bot_response = []
-
+client = wolframalpha.Client("UXJ7K4-27QR8YUARX")
+greetings = ["hey","hi","hello","welcome","yo"]
+affirm = ["sure","yes","yup","y","why not","of cource"]
+confirm = ["you got it","sure","as you wish"]
+reject = ["I'm sorry I cannot do that"]
+thanks = ["thanks","thank","thnx"]
 app = Flask(__name__)
 app.static_folder = 'static'
 @app.route("/")
@@ -65,7 +72,11 @@ def get_bot_response():
     lst = userText.split(" ")
 
     for i in lst:
-        if ("mail" or "email" or "message") in userText and "@" in userText:
+        if i.lower() in greetings:
+            return random.choice(greetings)+" "+dict["first-name"]
+        elif i.lower() in thanks:
+            return random.choice(["You're Welcome 😊","Oh! that's my job 😊"])
+        elif ("mail" or "email" or "message") in userText and "@" in userText:
             for i in lst:
                 if "@" in i:
                     global mail_addr
@@ -92,7 +103,20 @@ def get_bot_response():
             return random.choice(["Got it! The mail has been sent 👍","The message has been sent 👍","Mail sent 👍"])
         except:
             return 'Oops! Looks like I\'m unable to send the mail because Google is blocking me from doing so. Please go to <a href="https://www.google.com/settings/security/lesssecureapps">this link</a> to allow me to send mails'
+    
+    elif ("who" and "you") in lst or ("what" and "name" and "your") in lst:
+        bot_response.append(userText)
+        return random.choice(["My name is wall-e","My developers named me wall-e","you can call me wall-e"])
 
+    elif ("open" and "google") in lst:
+        bot_response.append(userText)
+        webbrowser.get().open("https://www.google.com",new=2)
+        return "Opening Google 👍"
+
+    elif ("open" and "discord") in lst:
+        bot_response.append(userText)
+        webbrowser.get().open("https://discord.com/channels/@me")
+        return "Opening Discord 🎮"
 
     elif "news" in userText:     #Data scraping from a google
         news_url = "https://news.google.com/news/rss"
@@ -103,10 +127,10 @@ def get_bot_response():
         news_list = soup_page.findAll("item")
         news_t = "Here are some news"
         for news in news_list[0:3]:
-            news_final = news_t + "\n" + news.title.text
+            news_final = "<u>"+news_t + "</u><br>" + news.title.text
         return news_final
     
-    elif "wikipedia" in userText:
+    elif "wikipedia" in lst:
         query = userText.replace("wikipedia", "").lstrip()
         summary = wikipedia.summary(query, sentences = 3)
         return summary
@@ -131,7 +155,7 @@ def get_bot_response():
         conn.close()
         return f"Todo named {todo} added successfully into the database!"
     
-    elif 'delete a todo' or "complete a todo" in userText:
+    elif ('delete a todo' or "complete a todo") in userText:
         todo = userText.replace("delete a todo", "").replace("complete a todo", '').lstrip()
         conn = sqlite3.connect("data\\misc\\todos.db")
         c = conn.cursor()
@@ -139,11 +163,11 @@ def get_bot_response():
         c.execute("SELECT * FROM todos WHERE todo = :todo", {"todo":todo})
         if len(c.fetchall()) == 0:
             return f"No todo named {todo} found in the database!"
-
-        c.execute("DELETE FROM todos WHERE todo = :todo", {"todo":todo})
-        conn.commit()
-        conn.close()
-        return f"Todo named {todo} deleted successfully from the database!"
+        else:
+            c.execute("DELETE FROM todos WHERE todo = :todo", {"todo":todo})
+            conn.commit()
+            conn.close()
+            return f"Todo named {todo} deleted successfully from the database!"
 
     elif "view todos" in userText:
         conn = sqlite3.connect("data\\misc\\todos.db")
@@ -155,6 +179,23 @@ def get_bot_response():
             date = i[1]
             data += f"{todo} - {date}\n"
         return data
+    
+    elif "youtube" in lst:
+        if ("search" or "play") in lst:
+            query = userText.replace("youtube", "").lstrip()
+            pywhatkit.playonyt(query)
+            return "Playing "+query+" on youtube 🎥"
+        else:
+            bot_response.append(userText)
+            webbrowser.get().open("https://www.youtube.com",new = 2)
+            return "opening youtube 📺"
+
+    else:
+        try:
+            return next(client.query(userText).results).text
+        except:
+            pywhatkit.search(userText)
+            return "Sorry. I do not have the answer to your query, so I'm searching the web for the answer ."
 
 if __name__ == "__main__":
     app.run()
