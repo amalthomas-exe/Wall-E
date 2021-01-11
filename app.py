@@ -12,8 +12,8 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import wikipedia
 import sqlite3
-now = datetime.now()
-now2 = now.strftime("%H:%M")
+
+
 now = datetime.now().strftime("%H:%M")
 user_commands = []
 bot_response = []
@@ -23,6 +23,7 @@ affirm = ["sure","yes","yup","y","why not","of cource"]
 confirm = ["you got it","sure","as you wish"]
 reject = ["I'm sorry I cannot do that"]
 thanks = ["thanks","thank","thnx"]
+
 app = Flask(__name__)
 app.static_folder = 'static'
 @app.route("/")
@@ -73,9 +74,10 @@ def get_bot_response():
 
     for i in lst:
         if i.lower() in greetings:
-            return random.choice(greetings)+" "+dict["first-name"]
+            return f"{random.choice(greetings)} {dict['first-name']}"
         elif i.lower() in thanks:
             return random.choice(["You're Welcome 😊","Oh! that's my job 😊"])
+        
         elif ("mail" or "email" or "message") in userText and "@" in userText:
             for i in lst:
                 if "@" in i:
@@ -172,6 +174,7 @@ def get_bot_response():
     elif "view todos" in userText:
         conn = sqlite3.connect("data\\misc\\todos.db")
         c = conn.cursor()
+        c.execute("CREATE TABLE IF NOT EXISTS todos (todo text, date text)")
         c.execute("SELECT * FROM todos")
         data = "Here are all the todos you've added:\n"
         for i in c.fetchall():
