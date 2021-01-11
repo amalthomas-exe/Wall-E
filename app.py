@@ -15,21 +15,21 @@ import sqlite3
 now = datetime.now().strftime("%H:%M")
 user_commands = []
 bot_response = []
+
 app = Flask(__name__)
 app.static_folder = 'static'
-
 @app.route("/")
 def home():
     try:
         global f
-        f=open("data\\user-data.dat","rb")
+        f=open("data\\user\\user-data.dat","rb")
         global dict
         dict = pickle.load(f)
         return render_template("index.html",time = now,User = dict["first-name"])
         
     except:
         global f1
-        f1 = open("data\\user-data.dat","wb")
+        f1 = open("data\\user\\user-data.dat","wb")
         global dict1
         dict1 = {}
         print("file created")
@@ -50,7 +50,7 @@ def success():
     pickle.dump(dict1,f1)
     f1.close()
     global f
-    f=open("data\\user-data.dat","rb")
+    f=open("data\\user\\user-data.dat","rb")
     global dict
     dict = pickle.load(f)
     print("Done")
@@ -89,7 +89,7 @@ def get_bot_response():
         try:
             mailer.send(mail_addr,"Message from "+dict["first-name"],userText)
             bot_response.clear()
-            return random.choice(["Got it! The mail has been sent 👍","The message has been sent 👍","Mail send 👍"])
+            return random.choice(["Got it! The mail has been sent 👍","The message has been sent 👍","Mail sent 👍"])
         except:
             return 'Oops! Looks like I\'m unable to send the mail because Google is blocking me from doing so. Please go to <a href="https://www.google.com/settings/security/lesssecureapps">this link</a> to allow me to send mails'
 
@@ -101,10 +101,10 @@ def get_bot_response():
         Client.close()
         soup_page = BeautifulSoup(xml_page, "html.parser")
         news_list = soup_page.findAll("item")
-        news = "Here are some news"
-        for news in news_list[:3]:
-            news = news + "\n" + news.title.text
-        return news
+        news_t = "Here are some news"
+        for news in news_list[0:3]:
+            news_final = news_t + "\n" + news.title.text
+        return news_final
     
     elif "wikipedia" in userText:
         query = userText.replace("wikipedia", "").lstrip()
@@ -122,7 +122,7 @@ def get_bot_response():
 
     elif "add a todo" in userText:
         todo = userText.replace("add a todo", "").lstrip()
-        conn = sqlite3.connect("todos.db")
+        conn = sqlite3.connect("data\\misc\\todos.db")
         date = datetime.now().strftime("%d/%m/%Y")
         c = conn.cursor()
         c.execute("CREATE TABLE IF NOT EXISTS todos (todo text, date text)")
@@ -133,7 +133,7 @@ def get_bot_response():
     
     elif 'delete a todo' or "complete a todo" in userText:
         todo = userText.replace("delete a todo", "").replace("complete a todo", '').lstrip()
-        conn = sqlite3.connect("todos.db")
+        conn = sqlite3.connect("data\\misc\\todos.db")
         c = conn.cursor()
         c.execute("CREATE TABLE IF NOT EXISTS todos (todo text, date text)")
         c.execute("SELECT * FROM todos WHERE todo = :todo", {"todo":todo})
@@ -146,7 +146,7 @@ def get_bot_response():
         return f"Todo named {todo} deleted successfully from the database!"
 
     elif "view todos" in userText:
-        conn = sqlite3.connect("todos.db")
+        conn = sqlite3.connect("data\\misc\\todos.db")
         c = conn.cursor()
         c.execute("SELECT * FROM todos")
         data = "Here are all the todos you've added:\n"
