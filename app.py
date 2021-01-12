@@ -89,8 +89,7 @@ def get_bot_response():
                         bot_response.append("mail-with-id")
                         return random.choice(["Please specify the message","What is the message?","What will be the message?"])
 
-                    except Exception as e:
-                        print(e)
+                    except Exception:
                         return "Looks like the provided mail id is not valid. Please check the mail id you have provided. "
 
         elif ("mail" or "email") in i.lower():
@@ -106,11 +105,11 @@ def get_bot_response():
         except:
             return 'Oops! Looks like I\'m unable to send the mail because Google is blocking me from doing so. Please go to <a href="https://www.google.com/settings/security/lesssecureapps">this link</a> to allow me to send mails'
     
-    elif ("who" and "you") in lst or ("what" and "name" and "your") in lst:
+    elif ("who" and "are") in lst or ("what" and "name" and "your") in lst:
         bot_response.append(userText)
         return random.choice(["My name is wall-e","My developers named me wall-e","you can call me wall-e"])
 
-    elif ("open" and "google") in lst:
+    elif ("open" and "google") in userText:
         bot_response.append(userText)
         webbrowser.get().open("https://www.google.com",new=2)
         return "Opening Google 👍"
@@ -119,6 +118,9 @@ def get_bot_response():
         bot_response.append(userText)
         webbrowser.get().open("https://discord.com/channels/@me")
         return "Opening Discord 🎮"
+    
+    elif "how" in lst and "you" in lst:
+        return random.choice(["I'm good! Thanks for asking","I'm doing great","I'm fine"])
 
     elif "news" in userText:     #Data scraping from a google
         news_url = "https://news.google.com/news/rss"
@@ -184,7 +186,7 @@ def get_bot_response():
         return data
     
     elif "youtube" in lst:
-        if ("search" or "play") in lst:
+        if "search" or "play" in lst:
             query = userText.replace("youtube", "").lstrip()
             pywhatkit.playonyt(query)
             return "Playing "+query+" on youtube 🎥"
