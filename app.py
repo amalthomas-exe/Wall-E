@@ -12,7 +12,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import wikipedia
 import sqlite3
-
+import pyjokes
 
 now = datetime.now().strftime("%H:%M")
 user_commands = []
@@ -68,14 +68,16 @@ def success():
 @app.route("/get")
 def get_bot_response():
     ##functions to be defined below this line
-
     userText = request.args.get('msg').lower()
+    print(userText)
     lst = userText.split(" ")
-
+    print(lst)
     for i in lst:
         if i.lower() in greetings:
+            lst.clear()
             return f"{random.choice(greetings)} {dict['first-name']}"
-        elif i.lower() in thanks:
+        if i.lower() in thanks:
+            lst.clear()
             return random.choice(["You're Welcome 😊","Oh! that's my job 😊"])
         
         elif ("mail" or "email" or "message") in userText and "@" in userText:
@@ -87,13 +89,16 @@ def get_bot_response():
                         valid = validate_email(mail_addr)
                         mail_addr = valid.email
                         bot_response.append("mail-with-id")
+                        lst.clear()
                         return random.choice(["Please specify the message","What is the message?","What will be the message?"])
 
                     except Exception:
+                        lst.clear()
                         return "Looks like the provided mail id is not valid. Please check the mail id you have provided. "
 
         elif ("mail" or "email") in i.lower():
             bot_response.append("mail-without-id")
+            lst.clear()
             return random.choice(["Please specify a mail-id","Please mention the mail-id of the recipient."])
 
     if bot_response!=[] and bot_response[-1]=="mail-with-id":
@@ -101,28 +106,34 @@ def get_bot_response():
         try:
             mailer.send(mail_addr,"Message from "+dict["first-name"],userText)
             bot_response.clear()
+            lst.clear()
             return random.choice(["Got it! The mail has been sent 👍","The message has been sent 👍","Mail sent 👍"])
         except:
+            lst.clear()
             return 'Oops! Looks like I\'m unable to send the mail because Google is blocking me from doing so. Please go to <a href="https://www.google.com/settings/security/lesssecureapps">this link</a> to allow me to send mails'
     
-    elif ("who" and "are") in lst or ("what" and "name" and "your") in lst:
+    if ("who" and "are") in lst or ("what" and "name" and "your") in lst:
         bot_response.append(userText)
+        lst.clear()
         return random.choice(["My name is wall-e","My developers named me wall-e","you can call me wall-e"])
 
-    elif ("open" and "google") in userText:
+    if ("open" and "google") in userText:
         bot_response.append(userText)
         webbrowser.get().open("https://www.google.com",new=2)
+        lst.clear()
         return "Opening Google 👍"
 
-    elif ("open" and "discord") in lst:
+    if ("open" and "discord") in lst:
         bot_response.append(userText)
         webbrowser.get().open("https://discord.com/channels/@me")
+        lst.clear()
         return "Opening Discord 🎮"
     
-    elif "how" in lst and "you" in lst:
+    if "how" in lst and "you" in lst:
+        lst.clear()
         return random.choice(["I'm good! Thanks for asking","I'm doing great","I'm fine"])
 
-    elif "news" in userText:     #Data scraping from a google
+    if "news" in userText:     #Data scraping from a google
         news_url = "https://news.google.com/news/rss"
         Client = urlopen(news_url)
         xml_page = Client.read()
@@ -132,23 +143,26 @@ def get_bot_response():
         news_t = "Here are some news"
         for news in news_list[0:3]:
             news_final = "<u>"+news_t + "</u><br>" + news.title.text
+        lst.clear()
         return news_final
     
-    elif "wikipedia" in lst:
+    if "wikipedia" in lst:
         query = userText.replace("wikipedia", "").lstrip()
         summary = wikipedia.summary(query, sentences = 3)
-        return summary
+        lst.clear()
+        return "According to Wikipedia <br> "+summary
 
-    elif "play music" in userText:
+    if "play music" in userText:
         music_directory = ""
         music_ext = ["mp3", "wav", "ogg"]
         playables = [i for i in os.listdir(music_directory) if i.split(".")[-1] in music_ext]
 
         if len(playables) == 0:
             return f"Found no audio file in {music_directory}. Try changing the directory or add some songs into it."
+        lst.clear()
         os.startfile(random.choice(playables))
 
-    elif "add a todo" in userText:
+    if "add a todo" in userText:
         todo = userText.replace("add a todo", "").lstrip()
         conn = sqlite3.connect("data\\misc\\todos.db")
         date = datetime.now().strftime("%d/%m/%Y")
@@ -157,23 +171,26 @@ def get_bot_response():
         c.execute("INSERT INTO todos VALUES (:todo, :date)", {"todo":todo, "date":date})
         conn.commit()
         conn.close()
+        lst.clear()
         return f"Todo named {todo} added successfully into the database!"
     
-    elif ('delete a todo' or "complete a todo") in userText:
+    if ('delete a todo' or "complete a todo") in userText:
         todo = userText.replace("delete a todo", "").replace("complete a todo", '').lstrip()
         conn = sqlite3.connect("data\\misc\\todos.db")
         c = conn.cursor()
         c.execute("CREATE TABLE IF NOT EXISTS todos (todo text, date text)")
         c.execute("SELECT * FROM todos WHERE todo = :todo", {"todo":todo})
         if len(c.fetchall()) == 0:
+            lst.clear()
             return f"No todo named {todo} found in the database!"
         else:
             c.execute("DELETE FROM todos WHERE todo = :todo", {"todo":todo})
             conn.commit()
             conn.close()
+            lst.clear()
             return f"Todo named {todo} deleted successfully from the database!"
 
-    elif "view todos" in userText:
+    if "view todos" in userText:
         conn = sqlite3.connect("data\\misc\\todos.db")
         c = conn.cursor()
         c.execute("CREATE TABLE IF NOT EXISTS todos (todo text, date text)")
@@ -183,23 +200,31 @@ def get_bot_response():
             todo = i[0]
             date = i[1]
             data += f"{todo} - {date}\n"
+        lst.clear()
         return data
     
-    elif "youtube" in lst:
+    if "youtube" in lst:
         if "search" or "play" in lst:
             query = userText.replace("youtube", "").lstrip()
             pywhatkit.playonyt(query)
+            lst.clear()
             return "Playing "+query+" on youtube 🎥"
         else:
             bot_response.append(userText)
             webbrowser.get().open("https://www.youtube.com",new = 2)
+            lst.clear()
             return "opening youtube 📺"
-
+    if "joke" in lst:
+        return pyjokes.get_joke()
+    
+    
     else:
         try:
+            lst.clear()
             return next(client.query(userText).results).text
         except:
             pywhatkit.search(userText)
+            lst.clear()
             return "Sorry. I do not have the answer to your query, so I'm searching the web for the answer ."
 
 if __name__ == "__main__":
