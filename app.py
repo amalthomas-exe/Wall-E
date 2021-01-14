@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 import wikipedia
 import sqlite3
 import pyjokes
+import requests
 
 now = datetime.now().strftime("%H:%M")
 user_commands = []
@@ -216,6 +217,13 @@ def get_bot_response():
             return "opening youtube 📺"
     if "joke" in lst:
         return pyjokes.get_joke()
+    
+    fact_cond = ["facts", "fact","intresting thing","surprise me"]
+    if any(cond in userText for cond in fact_cond):
+        data = requests.get("https://www.generatormix.com/random-facts-generator").content
+        soup = BeautifulSoup(data)
+        fact = soup.find("blockquote",attrs = {'class':"text-left"})
+        return (fact.text)
     
     
     else:
