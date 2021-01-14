@@ -223,7 +223,7 @@ def get_bot_response():
         data = requests.get("https://www.generatormix.com/random-facts-generator").content
         soup = BeautifulSoup(data)
         fact = soup.find("blockquote",attrs = {'class':"text-left"})
-        return (fact.text)
+        return "<p>Here's a fun fact</p><br>"+fact.text
     
     
     else:
