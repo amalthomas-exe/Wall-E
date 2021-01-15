@@ -14,6 +14,8 @@ import wikipedia
 import sqlite3
 import pyjokes
 import requests
+from threading import Thread
+from time import sleep
 
 now = datetime.now().strftime("%H:%M")
 user_commands = []
@@ -44,6 +46,38 @@ def home():
         print("file created")
         return render_template("new-user.html")
 
+def check_reminder():
+    """
+    Checks for reminders.
+    """
+    while True:   
+        conn = sqlite3.connect("reminders.db")
+        c = conn.cursor()
+        c.execute("CREATE TABLE IF NOT EXISTS reminders (content text, time text)")
+        c.execute("SELECT * FROM reminders")
+
+        now = datetime.now()
+        for i in c.fetchall():
+            if i[1] == now:
+                c.execute("DELETE FROM reminders WHERE time = :time", {"time":now})
+                conn.commit()
+                conn.close()
+                return f"You asked me to remind you to `{i[0]}` now."
+
+        sleep(60)
+
+
+def add_reminder(content:str, time:str):
+    """
+    Adds a reminder.
+    """
+    conn = sqlite3.connect("reminders.db")
+    c = conn.cursor()
+    c.execute("CREATE TABLE IF NOT EXISTS reminders (content text, time text)")
+    c.execute("INSERT INTO reminders VALUES (:content, :time)", {"content":content, "time":time})
+    conn.commit()
+    conn.close()
+    return f"Reminder {content} for {time} added successfully!"
 
 @app.route("/success",methods = ["POST"])
 def success():
@@ -69,6 +103,11 @@ def success():
 @app.route("/get")
 def get_bot_response():
     ##functions to be defined below this line
+
+    t1 = Thread(target=check_reminder)
+    t1.start()
+    t1.join()
+
     userText = request.args.get('msg').lower()
     print(userText)
     lst = userText.split(" ")
@@ -215,6 +254,7 @@ def get_bot_response():
             webbrowser.get().open("https://www.youtube.com",new = 2)
             lst.clear()
             return "opening youtube 📺"
+
     if "joke" in lst:
         return pyjokes.get_joke()
     
@@ -224,6 +264,11 @@ def get_bot_response():
         soup = BeautifulSoup(data)
         fact = soup.find("blockquote",attrs = {'class':"text-left"})
         return "<p>Here's a fun fact</p><br>"+fact.text
+
+    if "remind me to" in userText:
+        reminder = userText.replace("remind me to").lstrip()
+        # ? how to take time input @amalthomas.exe @Ankit404ButFound
+        add_reminder(reminder, "time")
     
     
     else:
