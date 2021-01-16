@@ -51,7 +51,7 @@ def check_reminder():
     Checks for reminders.
     """
     while True:   
-        conn = sqlite3.connect("reminders.db")
+        conn = sqlite3.connect("data\\misc\\reminders.db")
         c = conn.cursor()
         c.execute("CREATE TABLE IF NOT EXISTS reminders (content text, time text)")
         c.execute("SELECT * FROM reminders")
@@ -71,7 +71,7 @@ def add_reminder(content:str, time:str):
     """
     Adds a reminder.
     """
-    conn = sqlite3.connect("reminders.db")
+    conn = sqlite3.connect("data\\misc\\reminders.db")
     c = conn.cursor()
     c.execute("CREATE TABLE IF NOT EXISTS reminders (content text, time text)")
     c.execute("INSERT INTO reminders VALUES (:content, :time)", {"content":content, "time":time})
@@ -103,11 +103,8 @@ def success():
 @app.route("/get")
 def get_bot_response():
     ##functions to be defined below this line
-
     t1 = Thread(target=check_reminder)
     t1.start()
-    t1.join()
-
     userText = request.args.get('msg').lower()
     print(userText)
     lst = userText.split(" ")
