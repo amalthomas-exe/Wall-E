@@ -17,6 +17,7 @@ import requests
 from threading import Thread
 from time import sleep
 import re
+from plyer import notification
 
 now = datetime.now().strftime("%H:%M")
 user_commands = []
@@ -63,8 +64,7 @@ def check_reminder():
                 c.execute("DELETE FROM reminders WHERE time = :time", {"time":now})
                 conn.commit()
                 conn.close()
-                return f"You asked me to remind you to `{i[0]}` now."
-
+                notification.notify(title="Reminder from Wall-E",message=f"You asked me to remind you to `{i[0]}` now.",timeout = 20)
         sleep(60)
 
 
@@ -78,7 +78,6 @@ def add_reminder(content:str, time:str):
     c.execute("INSERT INTO reminders VALUES (:content, :time)", {"content":content, "time":time})
     conn.commit()
     conn.close()
-    return f"Reminder {content} for {time} added successfully!"
 
 @app.route("/success",methods = ["POST"])
 def success():
@@ -274,6 +273,7 @@ def get_bot_response():
         reminder = userText.replace(time, "").lstrip().rstrip()
 
         add_reminder(reminder, time)
+        return f"Reminder {reminder} for {time} added successfully!"
     
 
     else:
