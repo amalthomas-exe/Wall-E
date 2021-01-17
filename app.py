@@ -57,7 +57,7 @@ def check_reminder():
         c.execute("CREATE TABLE IF NOT EXISTS reminders (content text, time text)")
         c.execute("SELECT * FROM reminders")
 
-        now = datetime.now()
+        now = datetime.now().strftime("%d-%m-%y %H:%M")
         for i in c.fetchall():
             if i[1] == now:
                 c.execute("DELETE FROM reminders WHERE time = :time", {"time":now})
