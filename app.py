@@ -16,6 +16,7 @@ import pyjokes
 import requests
 from threading import Thread
 from time import sleep
+import re
 
 now = datetime.now().strftime("%H:%M")
 user_commands = []
@@ -263,11 +264,18 @@ def get_bot_response():
         return "<p>Here's a fun fact</p><br>"+fact.text
 
     if "remind me to" in userText:
-        reminder = userText.replace("remind me to").lstrip()
-        # ? how to take time input @amalthomas.exe @Ankit404ButFound
-        add_reminder(reminder, "time")
+        userText = userText.replace("remind me to", "").lstrip()
+        pattern = re.compile(r"\d\d-\d\d-\d\d \d\d:\d\d")
+        dates = re.findall(pattern, userText)
+        if len(dates) == 0:
+            return "Invalid time input! It must be in the `DD-MM-YY HH:MM` format."
+
+        time = dates[0]
+        reminder = userText.replace(time, "").lstrip().rstrip()
+
+        add_reminder(reminder, time)
     
-    
+
     else:
         try:
             lst.clear()
