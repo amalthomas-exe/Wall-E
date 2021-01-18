@@ -1,28 +1,15 @@
-import os
 from flask import Flask, render_template, request
-import wolframalpha
-import pywhatkit
+from pyfladesk import init_gui
 import pickle
 import random
-import webbrowser
 from datetime import datetime
-import yagmail
-from email_validator import validate_email, EmailNotValidError
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
-import wikipedia
 import sqlite3
-import pyjokes
-import requests
 from threading import Thread
 from time import sleep
-import re
-from plyer import notification
-
 now = datetime.now().strftime("%H:%M")
 user_commands = []
 bot_response = []
-client = wolframalpha.Client("UXJ7K4-27QR8YUARX")
+
 greetings = ["hey","hi","hello","welcome","yo"]
 affirm = ["sure","yes","yup","y","why not","of cource"]
 confirm = ["you got it","sure","as you wish"]
@@ -64,8 +51,9 @@ def check_reminder():
                 c.execute("DELETE FROM reminders WHERE time = :time", {"time":now})
                 conn.commit()
                 conn.close()
+                from plyer import notification
                 notification.notify(title="Reminder from Wall-E",message=f"You asked me to remind you to `{i[0]}` now.",timeout = 20)
-        sleep(60)
+        sleep(30)
 
 
 def add_reminder(content:str, time:str):
@@ -123,6 +111,7 @@ def get_bot_response():
                     global mail_addr
                     mail_addr=i
                     try:
+                        from email_validator import validate_email, EmailNotValidError
                         valid = validate_email(mail_addr)
                         mail_addr = valid.email
                         bot_response.append("mail-with-id")
@@ -139,6 +128,7 @@ def get_bot_response():
             return random.choice(["Please specify a mail-id","Please mention the mail-id of the recipient."])
 
     if bot_response!=[] and bot_response[-1]=="mail-with-id":
+        import yagmail
         mailer = yagmail.SMTP(dict["email"],dict["password"])
         try:
             mailer.send(mail_addr,"Message from "+dict["first-name"],userText)
@@ -155,12 +145,14 @@ def get_bot_response():
         return random.choice(["My name is wall-e","My developers named me wall-e","you can call me wall-e"])
 
     if ("open" and "google") in userText:
+        import webbrowser
         bot_response.append(userText)
         webbrowser.get().open("https://www.google.com",new=2)
         lst.clear()
         return "Opening Google 👍"
 
     if ("open" and "discord") in lst:
+        import webbrowser
         bot_response.append(userText)
         webbrowser.get().open("https://discord.com/channels/@me")
         lst.clear()
@@ -170,7 +162,9 @@ def get_bot_response():
         lst.clear()
         return random.choice(["I'm good! Thanks for asking","I'm doing great","I'm fine"])
 
-    if "news" in userText:     #Data scraping from a google
+    if "news" in userText:#Data scraping from a google
+        from bs4 import BeautifulSoup
+        from urllib.request import urlopen
         news_url = "https://news.google.com/news/rss"
         Client = urlopen(news_url)
         xml_page = Client.read()
@@ -184,12 +178,14 @@ def get_bot_response():
         return news_final
     
     if "wikipedia" in lst:
+        import wikipedia
         query = userText.replace("wikipedia", "").lstrip()
         summary = wikipedia.summary(query, sentences = 3)
         lst.clear()
         return "According to Wikipedia <br> "+summary
 
     if "play music" in userText:
+        import os
         music_directory = ""
         music_ext = ["mp3", "wav", "ogg"]
         playables = [i for i in os.listdir(music_directory) if i.split(".")[-1] in music_ext]
@@ -242,27 +238,33 @@ def get_bot_response():
     
     if "youtube" in lst:
         if "search" or "play" in lst:
+            import pywhatkit
             query = userText.replace("youtube", "").lstrip()
             pywhatkit.playonyt(query)
             lst.clear()
             return "Playing "+query+" on youtube 🎥"
         else:
+            import webbrowser
             bot_response.append(userText)
             webbrowser.get().open("https://www.youtube.com",new = 2)
             lst.clear()
             return "opening youtube 📺"
 
     if "joke" in lst:
+        import pyjokes
         return pyjokes.get_joke()
     
     fact_cond = ["facts", "fact","intresting thing","surprise me"]
     if any(cond in userText for cond in fact_cond):
+        import requests
+        from bs4 import BeautifulSoup
         data = requests.get("https://www.generatormix.com/random-facts-generator").content
         soup = BeautifulSoup(data)
         fact = soup.find("blockquote",attrs = {'class':"text-left"})
         return "<p>Here's a fun fact</p><br>"+fact.text
 
     if "remind me to" in userText:
+        import re
         userText = userText.replace("remind me to", "").lstrip()
         pattern = re.compile(r"\d\d-\d\d-\d\d \d\d:\d\d")
         dates = re.findall(pattern, userText)
@@ -278,12 +280,15 @@ def get_bot_response():
 
     else:
         try:
+            import wolframalpha
+            client = wolframalpha.Client("UXJ7K4-27QR8YUARX")
             lst.clear()
             return next(client.query(userText).results).text
         except:
+            import pywhatkit
             pywhatkit.search(userText)
             lst.clear()
             return "Sorry. I do not have the answer to your query, so I'm searching the web for the answer ."
 
 if __name__ == "__main__":
-    app.run()
+    init_gui(app,window_title="Wall-E")
