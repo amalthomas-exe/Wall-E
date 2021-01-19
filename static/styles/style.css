@@ -156,3 +156,6 @@ body {
   background-color:orange;
   color: white;
 }
+#uname{
+  opacity:0;
+}

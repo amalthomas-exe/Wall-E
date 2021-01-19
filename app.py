@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from pyfladesk import init_gui
+import webview
 import pickle
 import random
 from datetime import datetime
@@ -291,4 +291,5 @@ def get_bot_response():
             return "Sorry. I do not have the answer to your query, so I'm searching the web for the answer ."
 
 if __name__ == "__main__":
-    init_gui(app,window_title="Wall-E")
+    webview.create_window("Wall-E",app)
+    webview.start()

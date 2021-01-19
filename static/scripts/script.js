@@ -4,7 +4,7 @@ const msgerChat = get(".msger-chat");
 const BOT_IMG = "https://image.flaticon.com/icons/svg/327/327779.svg";
 const PERSON_IMG = "https://image.flaticon.com/icons/svg/145/145867.svg";
 const BOT_NAME = "Wall-E";
-const PERSON_NAME = prompt("To proceed, enter your name 😊:");
+const PERSON_NAME = document.getElementById("uname").innerHTML;
 
 msgerForm.addEventListener("submit", event => {
   event.preventDefault();
