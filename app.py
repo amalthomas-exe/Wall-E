@@ -6,6 +6,7 @@ from datetime import datetime
 import sqlite3
 from threading import Thread
 from time import sleep
+from gevent.pywsgi import WSGIServer
 now = datetime.now().strftime("%H:%M")
 user_commands = []
 bot_response = []
@@ -15,9 +16,9 @@ affirm = ["sure","yes","yup","y","why not","of cource"]
 confirm = ["you got it","sure","as you wish"]
 reject = ["I'm sorry I cannot do that"]
 thanks = ["thanks","thank","thnx"]
-
 app = Flask(__name__)
 app.static_folder = 'static'
+
 @app.route("/")
 def home():
     try:
@@ -93,6 +94,7 @@ def get_bot_response():
     ##functions to be defined below this line
     t1 = Thread(target=check_reminder)
     t1.start()
+    print("Thread started")
     userText = request.args.get('msg').lower()
     print(userText)
     lst = userText.split(" ")
@@ -228,21 +230,33 @@ def get_bot_response():
         c = conn.cursor()
         c.execute("CREATE TABLE IF NOT EXISTS todos (todo text, date text)")
         c.execute("SELECT * FROM todos")
-        data = "Here are all the todos you've added:\n"
+        data = "Here are all the todos you've added:<br>"
         for i in c.fetchall():
             todo = i[0]
             date = i[1]
-            data += f"{todo} - {date}\n"
+            data += f"{todo} - {date}<br>"
         lst.clear()
         return data
     
     if "youtube" in lst:
         if "search" or "play" in lst:
-            import pywhatkit
+            import requests
             query = userText.replace("youtube", "").lstrip()
-            pywhatkit.playonyt(query)
-            lst.clear()
-            return "Playing "+query+" on youtube 🎥"
+            url = 'https://www.youtube.com/results?q=' + query
+            count = 0
+            cont = requests.get(url)
+            data = str(cont.content)
+            lst = data.split('"')
+            for i in lst:
+                count+=1
+                if i == 'WEB_PAGE_TYPE_WATCH':
+                    break
+            if lst[count-5] == "/results":
+                return "No video found."
+            else:
+                vid_id_lst = lst[count-5].split("/watch?v=")
+                vid = "https://www.youtube.com/embed/"+vid_id_lst[-1]
+                return f'<iframe src={vid} title="Video" width="420" height="300"></iframe>'
         else:
             import webbrowser
             bot_response.append(userText)
