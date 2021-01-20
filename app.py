@@ -4,7 +4,7 @@ import pickle
 import random
 from datetime import datetime
 import sqlite3
-from threading import Thread
+from multiprocessing import Process
 from time import sleep
 from gevent.pywsgi import WSGIServer
 now = datetime.now().strftime("%H:%M")
@@ -92,9 +92,10 @@ def success():
 @app.route("/get")
 def get_bot_response():
     ##functions to be defined below this line
-    t1 = Thread(target=check_reminder)
-    t1.start()
+    p1 = Process(target=check_reminder)
+    p1.start()
     print("Thread started")
+    
     userText = request.args.get('msg').lower()
     print(userText)
     lst = userText.split(" ")
@@ -141,30 +142,30 @@ def get_bot_response():
             lst.clear()
             return 'Oops! Looks like I\'m unable to send the mail because Google is blocking me from doing so. Please go to <a href="https://www.google.com/settings/security/lesssecureapps">this link</a> to allow me to send mails'
     
-    if ("who" and "are") in lst or ("what" and "name" and "your") in lst:
+    elif ("who" and "are") in lst or ("what" and "name" and "your") in lst:
         bot_response.append(userText)
         lst.clear()
         return random.choice(["My name is wall-e","My developers named me wall-e","you can call me wall-e"])
 
-    if ("open" and "google") in userText:
+    elif ("open" and "google") in userText:
         import webbrowser
         bot_response.append(userText)
         webbrowser.get().open("https://www.google.com",new=2)
         lst.clear()
         return "Opening Google 👍"
 
-    if ("open" and "discord") in lst:
+    elif ("open" and "discord") in lst:
         import webbrowser
         bot_response.append(userText)
         webbrowser.get().open("https://discord.com/channels/@me")
         lst.clear()
         return "Opening Discord 🎮"
     
-    if "how" in lst and "you" in lst:
+    elif "how" in lst and "you" in lst:
         lst.clear()
         return random.choice(["I'm good! Thanks for asking","I'm doing great","I'm fine"])
 
-    if "news" in userText:#Data scraping from a google
+    elif "news" in userText:#Data scraping from a google
         from bs4 import BeautifulSoup
         from urllib.request import urlopen
         news_url = "https://news.google.com/news/rss"
@@ -179,14 +180,14 @@ def get_bot_response():
         lst.clear()
         return news_final
     
-    if "wikipedia" in lst:
+    elif "wikipedia" in lst:
         import wikipedia
         query = userText.replace("wikipedia", "").lstrip()
         summary = wikipedia.summary(query, sentences = 3)
         lst.clear()
         return "According to Wikipedia <br> "+summary
 
-    if "play music" in userText:
+    elif "play music" in userText:
         import os
         music_directory = ""
         music_ext = ["mp3", "wav", "ogg"]
@@ -197,7 +198,7 @@ def get_bot_response():
         lst.clear()
         os.startfile(random.choice(playables))
 
-    if "add a todo" in userText:
+    elif "add a todo" in userText:
         todo = userText.replace("add a todo", "").lstrip()
         conn = sqlite3.connect("data\\misc\\todos.db")
         date = datetime.now().strftime("%d/%m/%Y")
@@ -209,7 +210,7 @@ def get_bot_response():
         lst.clear()
         return f"Todo named {todo} added successfully into the database!"
     
-    if ('delete a todo' or "complete a todo") in userText:
+    elif ('delete a todo' or "complete a todo") in userText:
         todo = userText.replace("delete a todo", "").replace("complete a todo", '').lstrip()
         conn = sqlite3.connect("data\\misc\\todos.db")
         c = conn.cursor()
@@ -225,7 +226,7 @@ def get_bot_response():
             lst.clear()
             return f"Todo named {todo} deleted successfully from the database!"
 
-    if "view todos" in userText:
+    elif "view todos" in userText:
         conn = sqlite3.connect("data\\misc\\todos.db")
         c = conn.cursor()
         c.execute("CREATE TABLE IF NOT EXISTS todos (todo text, date text)")
@@ -238,7 +239,7 @@ def get_bot_response():
         lst.clear()
         return data
     
-    if "youtube" in lst:
+    elif "youtube" in lst:
         if "search" or "play" in lst:
             import requests
             query = userText.replace("youtube", "").lstrip()
@@ -264,12 +265,11 @@ def get_bot_response():
             lst.clear()
             return "opening youtube 📺"
 
-    if "joke" in lst:
+    elif "joke" in lst:
         import pyjokes
         return pyjokes.get_joke()
     
-    fact_cond = ["facts", "fact","intresting thing","surprise me"]
-    if any(cond in userText for cond in fact_cond):
+    elif any(cond in userText for cond in ["facts", "fact","intresting thing","surprise me"]):
         import requests
         from bs4 import BeautifulSoup
         data = requests.get("https://www.generatormix.com/random-facts-generator").content
@@ -277,7 +277,7 @@ def get_bot_response():
         fact = soup.find("blockquote",attrs = {'class':"text-left"})
         return "<p>Here's a fun fact</p><br>"+fact.text
 
-    if "remind me to" in userText:
+    elif "remind me to" in userText:
         import re
         userText = userText.replace("remind me to", "").lstrip()
         pattern = re.compile(r"\d\d-\d\d-\d\d \d\d:\d\d")
