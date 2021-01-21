@@ -6,7 +6,6 @@ from datetime import datetime
 import sqlite3
 from multiprocessing import Process
 from time import sleep
-from gevent.pywsgi import WSGIServer
 now = datetime.now().strftime("%H:%M")
 user_commands = []
 bot_response = []
