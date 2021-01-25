@@ -10,7 +10,7 @@ now = datetime.now().strftime("%H:%M")
 user_commands = []
 bot_response = []
 
-greetings = ["hey","hi","hello","welcome","yo"]
+greetings = ["Hey","Hi","Hello","Welcome","Yo"]
 affirm = ["sure","yes","yup","y","why not","of cource"]
 confirm = ["you got it","sure","as you wish"]
 reject = ["I'm sorry I cannot do that"]
