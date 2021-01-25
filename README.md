@@ -9,6 +9,10 @@ Wall-E is a virtual assistant written in pure Python, it can be your just anothe
 - Play music
 - Play YouTube videos
 - Reminder feature
+- Todo lists
+- Fun facts
+- Jokes 
+<br>  and more....
 
 ### Some of the common commands
 - **Send email** - 
@@ -30,6 +34,9 @@ To play any YouTube video, type "Play Shape of You on YouTube" or "Search youtub
 
 - **Reminder Ability** -
 To add a reminder, just type "remind me to {your reminder} {time in dd-mm-yyyy hh:mm format} and it will automatically remind you.
+
+- **Todo Lists**-
+To add a todo, just type "add a todo {todo name}" and it will be added to the list !
 
 There are many other features, explore our bot to find out. ;-)
 
