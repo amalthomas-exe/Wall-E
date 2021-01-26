@@ -7,10 +7,9 @@ import sqlite3
 from multiprocessing import Process
 from time import sleep
 now = datetime.now().strftime("%H:%M")
-user_commands = []
 bot_response = []
 
-greetings = ["Hey","Hi","Hello","Welcome","Yo"]
+greetings = ["hey","hi","hello","welcome","yo"]
 affirm = ["sure","yes","yup","y","why not","of cource"]
 confirm = ["you got it","sure","as you wish"]
 reject = ["I'm sorry I cannot do that"]
@@ -25,6 +24,9 @@ def home():
         f=open("data\\user\\user-data.dat","rb")
         global dict
         dict = pickle.load(f)
+        p1 = Process(target=check_reminder)
+        p1.start()
+        print("Thread started")
         return render_template("index.html",time = now,User = dict["first-name"])
         
     except:
@@ -52,7 +54,7 @@ def check_reminder():
                 conn.commit()
                 conn.close()
                 from plyer import notification
-                notification.notify(title="Reminder from Wall-E",message=f"You asked me to remind you to `{i[0]}` now.",timeout = 20)
+                notification.notify(title="Reminder from Wall-E",message=f"You asked me to remind you to `{i[0]}` now.",app_name="Wall-E",app_icon="icon.ico",timeout = 15)
         sleep(30)
 
 
@@ -85,16 +87,15 @@ def success():
     global dict
     dict = pickle.load(f)
     print("Done")
+    p1 = Process(target=check_reminder)
+    p1.start()
+    print("Thread started")
     return render_template("index.html",time = now,User = dict["first-name"])
 
 
 @app.route("/get")
 def get_bot_response():
     ##functions to be defined below this line
-    p1 = Process(target=check_reminder)
-    p1.start()
-    print("Thread started")
-    
     userText = request.args.get('msg').lower()
     print(userText)
     lst = userText.split(" ")
@@ -102,7 +103,7 @@ def get_bot_response():
     for i in lst:
         if i.lower() in greetings:
             lst.clear()
-            return f"{random.choice(greetings)} {dict['first-name']}"
+            return f"{random.choice(['hi','Hey','Hello','Welcome','Yo'])} {dict['first-name']}"
         if i.lower() in thanks:
             lst.clear()
             return random.choice(["You're Welcome 😊","Oh! that's my job 😊"])
@@ -124,7 +125,7 @@ def get_bot_response():
                         lst.clear()
                         return "Looks like the provided mail id is not valid. Please check the mail id you have provided. "
 
-        elif ("mail" or "email") in i.lower():
+        elif ("mail" or "email" or "message") in i.lower():
             bot_response.append("mail-without-id")
             lst.clear()
             return random.choice(["Please specify a mail-id","Please mention the mail-id of the recipient."])
@@ -141,7 +142,7 @@ def get_bot_response():
             lst.clear()
             return 'Oops! Looks like I\'m unable to send the mail because Google is blocking me from doing so. Please go to <a href="https://www.google.com/settings/security/lesssecureapps">this link</a> to allow me to send mails'
     
-    elif ("who" and "are") in lst or ("what" and "name" and "your") in lst:
+    elif "who" and "are" in lst or "what" and "name" and "your" in lst:
         bot_response.append(userText)
         lst.clear()
         return random.choice(["My name is wall-e","My developers named me wall-e","you can call me wall-e"])
