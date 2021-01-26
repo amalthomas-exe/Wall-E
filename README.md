@@ -1,6 +1,6 @@
 # Timathon-Virtual-Assistant-Runtime-Errors
 ## A virtual assistant named Wall-E written in pure Python
-Wall-E is a virtual assistant written in pure Python, it can be your just another friend and talk to you like any other human. There are many embedded in this bot which can be used to get personalized information like the weather around you, the news and many other things.
+Wall-E is a virtual assistant written in pure Python, it can be your just another friend and talk to you like any other human. There are many embedded features in this bot which can be used to get personalized information like the weather around you, the news and many other things.
 ### Some key features of Wall - E
 - Send email
 - Open Google
@@ -33,13 +33,28 @@ To play music, type "Play music" and it will play any random music which is in y
 To play any YouTube video, type "Play Shape of You on YouTube" or "Search youtube for Python" and it will play that YouTube video.
 
 - **Reminder Ability** -
-To add a reminder, just type "remind me to {your reminder} {time in dd-mm-yyyy hh:mm format} and it will automatically remind you.
+To add a reminder, just type "remind me to {your reminder} {time in dd-mm-yyyy hh:mm format} and it will automatically remind you. Example - *remind me to do exercise 26-01-21 18:00*
 
 - **Todo Lists**-
-To add a todo, just type "add a todo {todo name}" and it will be added to the list !
+To add a todo, just type "add a todo {todo name}" and it will be added to the todo list!
 
 There are many other features, explore our bot to find out. ;-)
 
-## Contributors
+## Team Members
+<!-- Add what you contributed here -->
 - [Amal Thomas](https://github.com/amalthomas-exe) - GUI, bot server
-- [Shravan](https://github.com/Shravan-1908) - < Add what you contributed here >
+- [Shravan](https://github.com/Shravan-1908) - Todo lists, reminders, wikipedia summary, music player
+
+
+## Installation
+### Using Git
+Type the following command in your Git Bash:
+
+- For cloning via SSH:
+```git clone git@github.com:amalthomas-exe/Timathon-Virtual-Assistant-Runtime-Errors.git```
+- For cloning via HTTPS: ```git clone https://github.com/amalthomas-exe/Timathon-Virtual-Assistant-Runtime-Errors.git```
+
+The whole repository would be cloned in the directory you opened the Git Bash in.
+
+### ZIP download
+You can alternatively download the repository as a zip file by clicking [here](https://github.com/amalthomas-exe/Timathon-Virtual-Assistant-Runtime-Errors/archive/main.zip).
