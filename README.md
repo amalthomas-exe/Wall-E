@@ -54,6 +54,9 @@ Type the following command in your Git Bash:
 ```git clone git@github.com:amalthomas-exe/Timathon-Virtual-Assistant-Runtime-Errors.git```
 - For cloning via HTTPS: ```git clone https://github.com/amalthomas-exe/Timathon-Virtual-Assistant-Runtime-Errors.git```
 
+Then for installing the required libraries, type in:<br>
+```pip install -r requirements.txt```
+
 The whole repository would be cloned in the directory you opened the Git Bash in.
 
 ### ZIP download
