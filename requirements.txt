@@ -1,2 +1,11 @@
 flask
 pywebview
+wolframalpha
+pywhatkit
+pyjokes
+wikipedia
+bs4
+yagmail
+keyring
+plyer
+email-validator
