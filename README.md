@@ -36,7 +36,7 @@ To play any YouTube video, type "Play Shape of You on YouTube" or "Search youtub
 To add a reminder, just type "remind me to {your reminder} {time in dd-mm-yyyy hh:mm format} and it will automatically remind you. Example - *remind me to do exercise 26-01-21 18:00*
 
 - **Todo Lists**-
-To add a todo, just type "add a todo {todo name}" and it will be added to the todo list!
+To add a todo, just type "add a todo {todo name}" and it will be added to the todo list! Other commands are "delete a todo {name}" and "view todos".
 
 There are many other features, explore our bot to find out. ;-)
 

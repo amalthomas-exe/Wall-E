@@ -264,7 +264,7 @@ def get_bot_response():
             else:
                 vid_id_lst = lst[count-5].split("/watch?v=")
                 vid = "https://www.youtube.com/embed/"+vid_id_lst[-1]
-                return f'<iframe src={vid} title="Video" width="420" height="300"></iframe>'
+                return f'Sure! here you go 👍<br><iframe src={vid} title="Video" width="420" height="300"></iframe>'
         else:
             import webbrowser
             bot_response.append(userText)
