@@ -298,6 +298,9 @@ def get_bot_response():
         add_reminder(reminder, time)
         return f"Reminder {reminder} for {time} added successfully!"
     
+    elif "how to use you" or "help" in userText:
+        import webbrowser
+        webbrowser.get().open_new_tab("https://github.com/amalthomas-exe/Wall-E#readme")
 
     else:
         try:
