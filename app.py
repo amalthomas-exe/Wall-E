@@ -76,11 +76,18 @@ def success():
     name_last = request.form["last-name"]
     email = request.form["email-id"]
     password = request.form["password"]
-    dict1["first-name"] = name_first
-    dict1["last-name"] = name_last
-    dict1["email"] = email
-    dict1["password"] = password
-    pickle.dump(dict1,f1)
+    if password=="":
+        dict1["first-name"] = name_first
+        dict1["last-name"] = name_last
+        dict1["email"] = "bot.walle1@gmail.com"
+        dict1["password"] = "walle1234"
+        pickle.dump(dict1,f1)
+    else:
+        dict1["first-name"] = name_first
+        dict1["last-name"] = name_last
+        dict1["email"] = email
+        dict1["password"] = password
+        pickle.dump(dict1,f1)
     f1.close()
     global f
     f=open("data\\user\\user-data.dat","rb")

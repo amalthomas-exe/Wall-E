@@ -62,3 +62,12 @@
 #submit:hover > i{
     transform: translateX(10px);
 }
+#or{
+    text-align: center;
+}
+#opt{
+    text-align: center;
+}
+#opt2{
+    text-align: center;
+}
