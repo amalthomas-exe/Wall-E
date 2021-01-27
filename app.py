@@ -101,7 +101,7 @@ def get_bot_response():
     lst = userText.split(" ")
     print(lst)
     for i in lst:
-        if i.lower() in greetings:
+        if i.lower() in greetings and len(lst)<3:
             lst.clear()
             return f"{random.choice(['hi','Hey','Hello','Welcome','Yo'])} {dict['first-name']}"
         if i.lower() in thanks:
@@ -161,7 +161,7 @@ def get_bot_response():
         lst.clear()
         return "Opening Discord 🎮"
     
-    elif "how" in lst and "you" in lst:
+    elif ("how are you" or "how do you do") in userText:
         lst.clear()
         return random.choice(["I'm good! Thanks for asking","I'm doing great","I'm fine"])
 
