@@ -1,4 +1,5 @@
 import time
+import os
 start = time.time()
 import multiprocessing
 from flask import Flask, render_template, request
@@ -197,14 +198,17 @@ def get_bot_response():
 
     elif "play music" in userText:
         import os
-        music_directory = ""
+        from pathlib import Path
+        music_directory = str(Path.home())+"\\Music"
         music_ext = ["mp3", "wav", "ogg"]
         playables = [i for i in os.listdir(music_directory) if i.split(".")[-1] in music_ext]
 
         if len(playables) == 0:
             return f"Found no audio file in {music_directory}. Try changing the directory or add some songs into it."
         lst.clear()
-        os.startfile(random.choice(playables))
+        song = random.choice(playables)
+        os.startfile(music_directory+"\\"+song)
+        return f"Sure, playing {song}"
 
     elif "add a todo" in userText:
         todo = userText.replace("add a todo", "").lstrip()
