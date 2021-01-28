@@ -1,3 +1,5 @@
+import time
+start = time.time()
 import multiprocessing
 from flask import Flask, render_template, request
 from gevent.pywsgi import WSGIServer
@@ -26,9 +28,6 @@ def home():
         f=open("data\\user\\user-data.dat","rb")
         global dict
         dict = pickle.load(f)
-        p1 = Process(target=check_reminder)
-        p1.start()
-        print("Thread started")
         return render_template("index.html",time = now,User = dict["first-name"])
         
     except:
@@ -96,15 +95,15 @@ def success():
     global dict
     dict = pickle.load(f)
     print("Done")
-    p1 = Process(target=check_reminder)
-    p1.start()
-    print("Thread started")
     return render_template("index.html",time = now,User = dict["first-name"])
 
 
 @app.route("/get")
 def get_bot_response():
     ##functions to be defined below this line
+    p1 = Process(target=check_reminder)
+    p1.start()
+    print("Thread started")
     userText = request.args.get('msg').lower()
     print(userText)
     lst = userText.split(" ")
@@ -274,7 +273,7 @@ def get_bot_response():
             lst.clear()
             return "opening youtube 📺"
 
-    elif "joke" in lst:
+    elif "joke" in userText:
         import pyjokes
         return pyjokes.get_joke()
     
@@ -300,6 +299,9 @@ def get_bot_response():
         add_reminder(reminder, time)
         return f"Reminder {reminder} for {time} added successfully!"
     
+    elif "help" in userText:
+        import webbrowser
+        webbrowser.get().open_new_tab("https://github.com/amalthomas-exe/Wall-E#readme")
 
     else:
         try:
@@ -314,12 +316,14 @@ def get_bot_response():
             return "Sorry. I do not have the answer to your query, so I'm searching the web for the answer ."
 def run_server():
     print("Server started")
+    app.jinja_env.cache = {}
     http_server = WSGIServer(('', 5000), app)
     http_server.serve_forever()
 
 if __name__ == "__main__":
     t2 = multiprocessing.Process(target=run_server)
-    t2.daemon=True
     t2.start()
-    webview.create_window("Wall-E",app)
+    webview.create_window("Wall-E","http://localhost:5000")
+    end = time.time()
+    print(f"It took {end-start:.2f} seconds to compute")
     webview.start()
