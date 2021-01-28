@@ -1,6 +1,6 @@
 import time
-import os
 start = time.time()
+import os
 import multiprocessing
 from flask import Flask, render_template, request
 from gevent.pywsgi import WSGIServer
@@ -323,11 +323,13 @@ def run_server():
     app.jinja_env.cache = {}
     http_server = WSGIServer(('', 5000), app)
     http_server.serve_forever()
-
+def on_close():
+    t2.kill()
 if __name__ == "__main__":
     t2 = multiprocessing.Process(target=run_server)
     t2.start()
-    webview.create_window("Wall-E","http://localhost:5000")
+    window = webview.create_window("Wall-E","http://localhost:5000")
     end = time.time()
+    window.closing+=on_close
     print(f"It took {end-start:.2f} seconds to compute")
     webview.start()
