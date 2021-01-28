@@ -4,7 +4,7 @@ Flask == 1.1.2
 
 beautifulsoup4 == 4.9.1
 
-email_validator == 1.1.2
+email-validator == 1.1.2
 
 plyer == 2.0.0
 
@@ -21,3 +21,7 @@ wikipedia == 1.4.0
 wolframalpha == 4.1.1
 
 yagmail == 0.14.245
+
+keyring
+
+gevent

@@ -1,4 +1,6 @@
+import multiprocessing
 from flask import Flask, render_template, request
+from gevent.pywsgi import WSGIServer
 import webview
 import pickle
 import random
@@ -298,9 +300,6 @@ def get_bot_response():
         add_reminder(reminder, time)
         return f"Reminder {reminder} for {time} added successfully!"
     
-    elif "how to use you" or "help" in userText:
-        import webbrowser
-        webbrowser.get().open_new_tab("https://github.com/amalthomas-exe/Wall-E#readme")
 
     else:
         try:
@@ -313,7 +312,14 @@ def get_bot_response():
             pywhatkit.search(userText)
             lst.clear()
             return "Sorry. I do not have the answer to your query, so I'm searching the web for the answer ."
+def run_server():
+    print("Server started")
+    http_server = WSGIServer(('', 5000), app)
+    http_server.serve_forever()
 
 if __name__ == "__main__":
+    t2 = multiprocessing.Process(target=run_server)
+    t2.daemon=True
+    t2.start()
     webview.create_window("Wall-E",app)
     webview.start()
