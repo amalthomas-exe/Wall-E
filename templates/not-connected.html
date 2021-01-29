@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/not-connected.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <title>Not Connected</title>
+</head>
+<body>
+    <section id="view">
+    <div id="main">
+        <p id="message">Oops! Looks like you are not connected.</p>
+        <p id="mess2">Please connect to the internet and restart the app</p>
+    </div>
+    <div id="img">
+        <img
+    src="{{url_for('static', filename='images/no_conn_img.svg')}}" 
+    alt="No connected image"
+    height="400"
+    width="400" />
+    </div>
+   </section>
+</body>
+</html>
