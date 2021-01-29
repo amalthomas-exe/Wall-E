@@ -1,7 +1,7 @@
 # Wall-E
 
 ![](https://img.shields.io/badge/CodeJam-Timathon-red)
-![exex](https://img.shields.io/badge/Executable-Windows%20|%20Linux-green)
+![exec](https://img.shields.io/badge/Executable-Windows%20|%20Linux-green)
 ![platforms](https://img.shields.io/badge/Platforms-Windows%20|%20Linux%20|%20Mac-blue)
 ![python version](https://img.shields.io/badge/Python%20Version-Python%203-yellow)
 ![downloads](https://img.shields.io/github/downloads/amalthomas-exe/Wall-E/total?color=2bbc8a)
@@ -53,16 +53,16 @@ There are many other features, explore our bot to find out. ;-)
 ## Team Members
 <!-- Add what you contributed here -->
 - [Amal Thomas](https://github.com/amalthomas-exe) - GUI, bot server
-- [Shravan](https://github.com/Shravan-1908) - Todo lists, reminders, wikipedia summary, music player
-
+- [Shravan](https://github.com/Shravan-1908) - Todo lists, reminders, music player
+- [Ankit](https://github.com/Ankit404butfound) - @Ankit404butfound add your contribution here
 
 ## Installation
 ### Using Git
 Type the following command in your Git Bash:
 
 - For cloning via SSH:
-```git clone git@github.com:amalthomas-exe/Timathon-Virtual-Assistant-Runtime-Errors.git```
-- For cloning via HTTPS: ```git clone https://github.com/amalthomas-exe/Timathon-Virtual-Assistant-Runtime-Errors.git```
+```git clone git@github.com:amalthomas-exe/Wall-E.git```
+- For cloning via HTTPS: ```git clone https://github.com/amalthomas-exe/Wall-E.git```
 
 Then for installing the required libraries, type in:<br>
 ```pip install -r requirements.txt```
@@ -70,4 +70,4 @@ Then for installing the required libraries, type in:<br>
 The whole repository would be cloned in the directory you opened the Git Bash in.
 
 ### ZIP download
-You can alternatively download the repository as a zip file by clicking [here](https://github.com/amalthomas-exe/Timathon-Virtual-Assistant-Runtime-Errors/archive/main.zip).
+You can alternatively download the repository as a zip file by clicking [here](https://github.com/amalthomas-exe/Wall-E/archive/main.zip).
