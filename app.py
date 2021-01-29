@@ -1,13 +1,14 @@
 import time
 start = time.time()
 import multiprocessing
-from flask import Flask, render_template, request
+from flask import Flask, render_template,request,url_for
 from gevent.pywsgi import WSGIServer
 import webview
 import pickle
 import random
 from datetime import datetime
 import sqlite3
+import os
 from multiprocessing import Process
 import urllib.request
 now = datetime.now().strftime("%H:%M")
@@ -19,7 +20,21 @@ confirm = ["you got it","sure","as you wish"]
 reject = ["I'm sorry I cannot do that"]
 thanks = ["thanks","thank","thnx"]
 app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.static_folder = 'static'
+@app.context_processor
+def override_url_for():
+    return dict(url_for=dated_url_for)
+
+def dated_url_for(endpoint, **values):
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+        if filename:
+            file_path = os.path.join(app.root_path,
+                                 endpoint, filename)
+            values['q'] = int(os.stat(file_path).st_mtime)
+        return url_for(endpoint, **values)
+        
 
 def check_for_connection():
     try:
@@ -34,9 +49,9 @@ if check_for_connection()==True:
         try:
             global f
             f=open("data\\user\\user-data.dat","rb")
-            global dict
-            dict = pickle.load(f)
-            return render_template("index.html",time = now,User = dict["first-name"])
+            global dict2
+            dict2 = pickle.load(f)
+            return render_template("index.html",time = now,User = dict2["first-name"])
             
         except:
             global f1
@@ -100,11 +115,11 @@ if check_for_connection()==True:
         f1.close()
         global f
         f=open("data\\user\\user-data.dat","rb")
-        global dict
-        dict = pickle.load(f)
+        global dict2
+        dict2 = pickle.load(f)
         print("Done")
         
-        return render_template("index.html",time = now,User = dict["first-name"])
+        return render_template("index.html",time = now,User = dict2["first-name"])
 
 
     @app.route("/get")
@@ -117,7 +132,7 @@ if check_for_connection()==True:
         for i in lst:
             if i.lower() in greetings and len(lst)<3:
                 lst.clear()
-                return f"{random.choice(['hi','Hey','Hello','Welcome','Yo'])} {dict['first-name']}"
+                return f"{random.choice(['hi','Hey','Hello','Welcome','Yo'])} {dict2['first-name']}"
             if i.lower() in thanks:
                 lst.clear()
                 return random.choice(["You're Welcome 😊","Oh! that's my job 😊"])
@@ -146,9 +161,9 @@ if check_for_connection()==True:
 
         if bot_response!=[] and bot_response[-1]=="mail-with-id":
             import yagmail
-            mailer = yagmail.SMTP(dict["email"],dict["password"])
+            mailer = yagmail.SMTP(dict2["email"],dict2["password"])
             try:
-                mailer.send(mail_addr,"Message from "+dict["first-name"],userText)
+                mailer.send(mail_addr,"Message from "+dict2["first-name"],userText)
                 bot_response.clear()
                 lst.clear()
                 return random.choice(["Got it! The mail has been sent 👍","The message has been sent 👍","Mail sent 👍"])
@@ -330,7 +345,6 @@ else:
 
 def run_server():
         print("Server started")
-        app.jinja_env.cache = {}
         http_server = WSGIServer(('', 5000), app)
         http_server.serve_forever()
 

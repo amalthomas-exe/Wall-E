@@ -1,6 +1,6 @@
 :root{
     font-family: 'Roboto', sans-serif;
-    background-image: url("https://miro.medium.com/max/3200/1*Sdckr5tAt5peOaZJgsAQ1Q.png");
+    background-image:url("https://images.cdn4.stockunlimited.net/preview1300/robot-saying-hello_1340574.jpg");;
     background-size:cover;
     background-repeat: no-repeat;
     background-position: left;
@@ -39,7 +39,7 @@
     border-radius: 7px;
 }
 .label{
-    margin-left: 30px;
+    margin-left: 50px;
     font-size:30px;
     margin-top: 257px;
     padding-top: 200px;
