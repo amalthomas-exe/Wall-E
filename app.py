@@ -199,7 +199,7 @@ def get_bot_response():
     elif "play music" in userText:
         import os
         from pathlib import Path
-        music_directory = str(Path.home())+"\\Music"
+        music_directory = os.path.join(os.path.expanduser("~"), "Music")
         music_ext = ["mp3", "wav", "ogg"]
         playables = [i for i in os.listdir(music_directory) if i.split(".")[-1] in music_ext]
 
