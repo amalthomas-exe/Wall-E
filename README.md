@@ -9,7 +9,7 @@
 ![issues](https://img.shields.io/github/issues/amalthomas-exe/Wall-E)
 
 
-## A virtual assistant named Wall-E written in pure Python
+## A virtual assistant named Wall-E written mainly in Python
 Wall-E is a virtual assistant written in pure Python, it can be your just another friend and talk to you like any other human. There are many embedded features in this bot which can be used to get personalized information like the weather around you, the news and many other things.
 
 ### Some key features of Wall - E
@@ -39,7 +39,7 @@ To get some of the latest news, you need to type "Wall - E, tell me some news" o
 To get Wikipedia summary on any particular topic, type "Wikipedia Python". 
 
 - **Get weather of a place** - 
-To get weather of a place, type "weather russia". 
+To get weather of a place, type "weather russia", or something like that.
 
 - **Play Music** - 
 To play music, type "Play music" and it will play any random music which is in your system.
