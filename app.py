@@ -362,6 +362,7 @@ if check_for_connection():
                 client = wolframalpha.Client("UXJ7K4-27QR8YUARX")
                 lst.clear()
                 return next(client.query(userText).results).text
+                
             except:
                 import pywhatkit
                 pywhatkit.search(userText)
@@ -380,6 +381,7 @@ def run_server():
 
 def on_close():
         t2.kill()
+        
 if __name__ == "__main__":
     multiprocessing.freeze_support()
     p1 = Process(target=check_reminder)
