@@ -12,7 +12,7 @@ import sqlite3
 import os
 from multiprocessing import Process
 import urllib.request
-key = "nhdjhvfjnvhfjdfnvhfjdfnhfjdnhfjdmnhfdjdfhjdkfj"
+key = "nhdjhvfjnvhfjdfnvhfjdfnhfjdjhhjrhkjhjjgblkbj"
 now = datetime.now().strftime("%H:%M")
 bot_response = []
 
