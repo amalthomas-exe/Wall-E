@@ -68,7 +68,7 @@ def check_reminder():
                 conn.commit()
                 conn.close()
                 from plyer import notification
-                notification.notify(title="Reminder from Wall-E",message=f"You asked me to remind you to `{i[0]}` now.",app_name="Wall-E",app_icon="icon.ico",timeout = 15)
+                notification.notify(title="Reminder from Wall-E",message=f"You asked me to remind you to `{i[0]}` now.",app_name="Wall-E",app_icon="images\\icon.ico",timeout = 15)
 
 
 def check_for_connection():
@@ -104,11 +104,14 @@ if check_for_connection():
         name_last = request.form["last-name"]
         email = request.form["email-id"]
         password = request.form["password"]
+        f2 = open("data\\default-data\\data_def.dat","rb")
+        dict3 = pickle.load(f2)
         if password=="":
             dict1["first-name"] = cryptocode.encrypt(name_first,key)
             dict1["last-name"] = cryptocode.encrypt(name_last,key)
-            dict1["email"] = cryptocode.encrypt("bot.walle1@gmail.com",key)
-            dict1["password"] = cryptocode.encrypt("walle1234",key)
+            dict1["email"] = dict3["email_def"]
+            dict1["password"] = dict3["passwd_def"]
+            f2.close()
             pickle.dump(dict1,f1)
         else:
             dict1["first-name"] = cryptocode.encrypt(name_first,key)
@@ -346,10 +349,10 @@ if check_for_connection():
                 text = condition['text']
 
                 if current_weather['is_day'] == 0:
-                    return f"It is currently night in {place} with current temperature being{current_weather['temp_c']}, though it feels like {current_weather['feelslike_c']}. The weather condition in {place} is {text}."
+                    return f"It is currently night in {place} with current temperature being {current_weather['temp_c']} C, though it feels like {current_weather['feelslike_c']}. The weather condition in {place} is {text}."
 
                 elif current_weather['is_day'] == 1:
-                    return f"It is currently day in {place} with current temperature being{current_weather['temp_c']}, though it feels like {current_weather['feelslike_c']}. The weather condition in {place} is {text}."
+                    return f"It is currently day in {place} with current temperature being {current_weather['temp_c']} C, though it feels like {current_weather['feelslike_c']}. The weather condition in {place} is {text}."
 
                 else:
                     return "An unknown error occured!"
