@@ -36,6 +36,39 @@ def dated_url_for(endpoint, **values):
         return url_for(endpoint, **values)
         
 
+def add_reminder(content:str, time:str):
+        """
+        Adds a reminder.
+        """
+        conn = sqlite3.connect("data\\misc\\reminders.db")
+        c = conn.cursor()
+        c.execute("CREATE TABLE IF NOT EXISTS reminders (content text, time text)")
+        c.execute("INSERT INTO reminders VALUES (:content, :time)", {"content":content, "time":time})
+        conn.commit()
+        conn.close()
+
+
+def check_reminder():
+    """
+    Checks for reminders.
+    """
+    while True:   
+        conn = sqlite3.connect("data\\misc\\reminders.db")
+        c = conn.cursor()
+        c.execute("CREATE TABLE IF NOT EXISTS reminders (content text, time text)")
+        c.execute("SELECT * FROM reminders")
+
+        now = datetime.now().strftime("%d-%m-%y %H:%M")
+        for i in c.fetchall():
+            if i[1] == now:
+                print("reminder up")
+                c.execute("DELETE FROM reminders WHERE time = :time", {"time":now})
+                conn.commit()
+                conn.close()
+                from plyer import notification
+                notification.notify(title="Reminder from Wall-E",message=f"You asked me to remind you to `{i[0]}` now.",app_name="Wall-E",app_icon="icon.ico",timeout = 15)
+
+
 def check_for_connection():
     try:
         urllib.request.urlopen("https://www.google.com") 
@@ -43,7 +76,7 @@ def check_for_connection():
     except:
         return False
 
-if check_for_connection()==True:
+if check_for_connection():
     @app.route("/")
     def home():
         try:
@@ -61,37 +94,6 @@ if check_for_connection()==True:
             print("file created")
             return render_template("new-user.html")
 
-    def check_reminder():
-        """
-        Checks for reminders.
-        """
-        while True:   
-            conn = sqlite3.connect("data\\misc\\reminders.db")
-            c = conn.cursor()
-            c.execute("CREATE TABLE IF NOT EXISTS reminders (content text, time text)")
-            c.execute("SELECT * FROM reminders")
-
-            now = datetime.now().strftime("%d-%m-%y %H:%M")
-            for i in c.fetchall():
-                if i[1] == now:
-                    print("reminder up")
-                    c.execute("DELETE FROM reminders WHERE time = :time", {"time":now})
-                    conn.commit()
-                    conn.close()
-                    from plyer import notification
-                    notification.notify(title="Reminder from Wall-E",message=f"You asked me to remind you to `{i[0]}` now.",app_name="Wall-E",app_icon="icon.ico",timeout = 15)
-
-
-    def add_reminder(content:str, time:str):
-        """
-        Adds a reminder.
-        """
-        conn = sqlite3.connect("data\\misc\\reminders.db")
-        c = conn.cursor()
-        c.execute("CREATE TABLE IF NOT EXISTS reminders (content text, time text)")
-        c.execute("INSERT INTO reminders VALUES (:content, :time)", {"content":content, "time":time})
-        conn.commit()
-        conn.close()
 
     @app.route("/success",methods = ["POST"])
     def success():
@@ -194,7 +196,7 @@ if check_for_connection()==True:
             lst.clear()
             return random.choice(["I'm good! Thanks for asking","I'm doing great","I'm fine"])
 
-        elif "news" in userText:#Data scraping from a google
+        elif "news" in userText:
             from bs4 import BeautifulSoup
             from urllib.request import urlopen
             news_url = "https://news.google.com/news/rss"
@@ -223,11 +225,12 @@ if check_for_connection()==True:
             playables = [i for i in os.listdir(music_directory) if i.split(".")[-1] in music_ext]
 
             if len(playables) == 0:
-                return f"Found no audio file in {music_directory}. Try changing the directory or add some songs into it."
+                return f"Found no audio file in {music_directory}. Try adding some songs into the music directory."
+
             lst.clear()
             song = random.choice(playables)
-            os.startfile(music_directory+"\\"+song)
-            return f"Sure, playing {song}"
+            os.startfile(os.path.join(music_directory, song))
+            return f"Sure, playing {song}."
 
         elif "add a todo" in userText:
             todo = userText.replace("add a todo", "").lstrip()
@@ -320,11 +323,38 @@ if check_for_connection()==True:
             reminder = userText.replace(time, "").lstrip().rstrip()
 
             add_reminder(reminder, time)
-            return f"Reminder {reminder} for {time} added successfully!"
+            return f"Reminder '{reminder}' for {time} added successfully!"
         
         elif "help" in userText:
             import webbrowser
             webbrowser.get().open_new_tab("https://github.com/amalthomas-exe/Wall-E#readme")
+
+        elif "weather" in userText:
+            from requests import get as rget
+            from json import loads as jloads
+            place = userText.replace("weather", "").lstrip()
+            url = f"http://api.weatherapi.com/v1/current.json?key=2f081a6878a747a5be135553200709&q={place.capitalize()}"
+
+            try:
+                r = rget(url).text
+                a = jloads(r)
+
+                current_weather = a.get('current')
+                condition = current_weather['condition']
+                text = condition['text']
+
+                if current_weather['is_day'] == 0:
+                    return f"It is currently night in {place} with current temperature being{current_weather['temp_c']}, though it feels like {current_weather['feelslike_c']}. The weather condition in {place} is {text}."
+
+                elif current_weather['is_day'] == 1:
+                    return f"It is currently day in {place} with current temperature being{current_weather['temp_c']}, though it feels like {current_weather['feelslike_c']}. The weather condition in {place} is {text}."
+
+                else:
+                    return "An unknown error occured!"
+
+            except Exception as e:
+                print(e)
+                return "Some error occured!"
 
         else:
             try:
@@ -350,6 +380,7 @@ def run_server():
 
 def on_close():
         t2.kill()
+
 if __name__ == "__main__":
     p1 = Process(target=check_reminder)
     p1.start()
