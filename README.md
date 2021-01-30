@@ -39,7 +39,7 @@ To get some of the latest news, you need to type "Wall - E, tell me some news" o
 To get Wikipedia summary on any particular topic, type "Wikipedia Python". 
 
 - **Get weather of a place** - 
-To get weather of a place, type "weather russia". 
+To get weather of a place, type "weather russia", or something like that.
 
 - **Play Music** - 
 To play music, type "Play music" and it will play any random music which is in your system.
