@@ -9,7 +9,7 @@
 ![issues](https://img.shields.io/github/issues/amalthomas-exe/Wall-E)
 
 
-## A virtual assistant named Wall-E written in pure Python
+## A virtual assistant named Wall-E written mainly in Python
 Wall-E is a virtual assistant written in pure Python, it can be your just another friend and talk to you like any other human. There are many embedded features in this bot which can be used to get personalized information like the weather around you, the news and many other things.
 
 ### Some key features of Wall - E
