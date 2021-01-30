@@ -1,6 +1,6 @@
 # Wall-E
 
-![](https://img.shields.io/badge/CodeJam-Timathon-red)
+![codejam](https://img.shields.io/badge/CodeJam-Timathon-red)
 ![exec](https://img.shields.io/badge/Executable-Windows%20|%20Linux-green)
 ![platforms](https://img.shields.io/badge/Platforms-Windows%20|%20Linux%20|%20Mac-blue)
 ![python version](https://img.shields.io/badge/Python%20Version-Python%203-yellow)
@@ -11,11 +11,13 @@
 
 ## A virtual assistant named Wall-E written in pure Python
 Wall-E is a virtual assistant written in pure Python, it can be your just another friend and talk to you like any other human. There are many embedded features in this bot which can be used to get personalized information like the weather around you, the news and many other things.
+
 ### Some key features of Wall - E
 - Send email
 - Open Google
 - Get latest news
 - Get Wikipedia summary
+- Get weather of a place
 - Play music
 - Play YouTube videos
 - Reminder feature
@@ -31,10 +33,13 @@ To send email, simply type "send mail to some.one@domain.com" and message will b
 - **Open Google** - To open Google, simply type "Wall - E, open Google" and Google will open in your default browser.
 
 - **Get news** - 
-To get some of the latest news, you need to type "Wall - E, give me some news" or any other relevant command and news will be printed.
+To get some of the latest news, you need to type "Wall - E, tell me some news" or any other relevant command and news will be printed.
 
 - **Get Wikipedia summary** - 
-To get Wikipedia summary on any particular topic, type "Give Wikipedia Python". 
+To get Wikipedia summary on any particular topic, type "Wikipedia Python". 
+
+- **Get weather of a place** - 
+To get weather of a place, type "weather russia". 
 
 - **Play Music** - 
 To play music, type "Play music" and it will play any random music which is in your system.
@@ -43,7 +48,7 @@ To play music, type "Play music" and it will play any random music which is in y
 To play any YouTube video, type "Play Shape of You on YouTube" or "Search youtube for Python" and it will play that YouTube video.
 
 - **Reminder Ability** -
-To add a reminder, just type "remind me to {your reminder} {time in dd-mm-yyyy hh:mm format} and it will automatically remind you. Example - *remind me to do exercise 26-01-21 18:00*
+To add a reminder, just type "remind me to {your reminder} {time in dd-mm-yyyy hh:mm format} and it will automatically remind you. Example - *remind me to do exercise 26-01-21 18:00*.
 
 - **Todo Lists**-
 To add a todo, just type "add a todo {todo name}" and it will be added to the todo list! Other commands are "delete a todo {name}" and "view todos".
@@ -57,6 +62,9 @@ There are many other features, explore our bot to find out. ;-)
 - [Ankit](https://github.com/Ankit404butfound) - @Ankit404butfound add your contribution here
 
 ## Installation
+### EXE release
+Download the *exe* release of the app by clicking [here](link-to-github-release).
+
 ### Using Git
 Type the following command in your Git Bash:
 
