@@ -380,8 +380,8 @@ def run_server():
 
 def on_close():
         t2.kill()
-
 if __name__ == "__main__":
+    multiprocessing.freeze_support()
     p1 = Process(target=check_reminder)
     p1.start()
     print("Thread started")
