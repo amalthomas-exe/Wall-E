@@ -1,5 +1,6 @@
 import time
 start = time.time()
+import cryptocode
 import multiprocessing
 from flask import Flask, render_template,request,url_for
 from gevent.pywsgi import WSGIServer
@@ -11,6 +12,7 @@ import sqlite3
 import os
 from multiprocessing import Process
 import urllib.request
+key = "nhdjhvfjnvhfjdfnvhfjdfnhfjdnhfjdmnhfdjdfhjdkfj"
 now = datetime.now().strftime("%H:%M")
 bot_response = []
 
@@ -69,7 +71,7 @@ if check_for_connection()==True:
             f=open("data\\user\\user-data.dat","rb")
             global dict2
             dict2 = pickle.load(f)
-            return render_template("index.html",time = now,User = dict2["first-name"])
+            return render_template("index.html",time = now,User = cryptocode.decrypt(dict2["first-name"],key))
             
         except:
             global f1
@@ -98,16 +100,16 @@ if check_for_connection()==True:
         email = request.form["email-id"]
         password = request.form["password"]
         if password=="":
-            dict1["first-name"] = name_first
-            dict1["last-name"] = name_last
-            dict1["email"] = "bot.walle1@gmail.com"
-            dict1["password"] = "walle1234"
+            dict1["first-name"] = cryptocode.encrypt(name_first,key)
+            dict1["last-name"] = cryptocode.encrypt(name_last,key)
+            dict1["email"] = cryptocode.encrypt("bot.walle1@gmail.com",key)
+            dict1["password"] = cryptocode.encrypt("walle1234",key)
             pickle.dump(dict1,f1)
         else:
-            dict1["first-name"] = name_first
-            dict1["last-name"] = name_last
-            dict1["email"] = email
-            dict1["password"] = password
+            dict1["first-name"] = cryptocode.encrypt(name_first,key)
+            dict1["last-name"] = cryptocode.encrypt(name_last,key)
+            dict1["email"] = cryptocode.encrypt(email,key)
+            dict1["password"] =cryptocode.encrypt(password,key)
             pickle.dump(dict1,f1)
         f1.close()
         global f
@@ -116,7 +118,7 @@ if check_for_connection()==True:
         dict2 = pickle.load(f)
         print("Done")
         
-        return render_template("index.html",time = now,User = dict2["first-name"])
+        return render_template("index.html",time = now,User = cryptocode.decrypt(dict2["first-name"],key))
 
 
     @app.route("/get")
@@ -129,7 +131,7 @@ if check_for_connection()==True:
         for i in lst:
             if i.lower() in greetings and len(lst)<3:
                 lst.clear()
-                return f"{random.choice(['hi','Hey','Hello','Welcome','Yo'])} {dict2['first-name']}"
+                return f"{random.choice(['hi','Hey','Hello','Welcome','Yo'])} {cryptocode.decrypt(dict2['first-name'],key)}"
             if i.lower() in thanks:
                 lst.clear()
                 return random.choice(["You're Welcome 😊","Oh! that's my job 😊"])
@@ -158,9 +160,9 @@ if check_for_connection()==True:
 
         if bot_response!=[] and bot_response[-1]=="mail-with-id":
             import yagmail
-            mailer = yagmail.SMTP(dict2["email"],dict2["password"])
+            mailer = yagmail.SMTP(cryptocode.decrypt(dict2["email"],key),cryptocode.decrypt(dict2["password"],key))
             try:
-                mailer.send(mail_addr,"Message from "+dict2["first-name"],userText)
+                mailer.send(mail_addr,"Message from "+cryptocode.decrypt(dict2["first-name"],key),userText)
                 bot_response.clear()
                 lst.clear()
                 return random.choice(["Got it! The mail has been sent 👍","The message has been sent 👍","Mail sent 👍"])
