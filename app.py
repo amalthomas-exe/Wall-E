@@ -178,11 +178,14 @@ if check_for_connection():
                 lst.clear()
                 return 'Oops! Looks like I\'m unable to send the mail because Google is blocking me from doing so. Please go to <a href="https://www.google.com/settings/security/lesssecureapps">this link</a> to allow me to send mails'
         
+        elif "how" and "you" in lst:
+            bot_response.append(userText)
+            return random.choice(["I'm fine. Thanks for asking","I'm good","I'm doing fine"])
         elif "who" and "are" in lst or "what" and "name" and "your" in lst:
             bot_response.append(userText)
             lst.clear()
             return random.choice(["My name is wall-e","My developers named me wall-e","you can call me wall-e"])
-
+        
         elif ("open" and "google") in userText:
             import webbrowser
             bot_response.append(userText)
