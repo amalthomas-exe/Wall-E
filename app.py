@@ -42,26 +42,7 @@ def check_for_connection():
         return True
     except:
         return False
-
-if check_for_connection()==True:
-    @app.route("/")
-    def home():
-        try:
-            global f
-            f=open("data\\user\\user-data.dat","rb")
-            global dict2
-            dict2 = pickle.load(f)
-            return render_template("index.html",time = now,User = dict2["first-name"])
-            
-        except:
-            global f1
-            f1 = open("data\\user\\user-data.dat","wb")
-            global dict1
-            dict1 = {}
-            print("file created")
-            return render_template("new-user.html")
-
-    def check_reminder():
+def check_reminder():
         """
         Checks for reminders.
         """
@@ -80,7 +61,23 @@ if check_for_connection()==True:
                     conn.close()
                     from plyer import notification
                     notification.notify(title="Reminder from Wall-E",message=f"You asked me to remind you to `{i[0]}` now.",app_name="Wall-E",app_icon="icon.ico",timeout = 15)
-
+if check_for_connection()==True:
+    @app.route("/")
+    def home():
+        try:
+            global f
+            f=open("data\\user\\user-data.dat","rb")
+            global dict2
+            dict2 = pickle.load(f)
+            return render_template("index.html",time = now,User = dict2["first-name"])
+            
+        except:
+            global f1
+            f1 = open("data\\user\\user-data.dat","wb")
+            global dict1
+            dict1 = {}
+            print("file created")
+            return render_template("new-user.html")
 
     def add_reminder(content:str, time:str):
         """
@@ -350,7 +347,9 @@ def run_server():
 
 def on_close():
         t2.kill()
+        p1.kill()
 if __name__ == "__main__":
+    multiprocessing.freeze_support()
     p1 = Process(target=check_reminder)
     p1.start()
     print("Thread started")
