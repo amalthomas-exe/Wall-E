@@ -59,7 +59,7 @@ There are many other features, explore our bot to find out. ;-)
 <!-- Add what you contributed here -->
 - [Amal Thomas](https://github.com/amalthomas-exe) - GUI, bot server
 - [Shravan](https://github.com/Shravan-1908) - Todo lists, reminders, music player
-- [Ankit](https://github.com/Ankit404butfound) - @Ankit404butfound add your contribution here
+- [Ankit](https://github.com/Ankit404butfound) - News, Jokes, Readme.md
 
 ## Installation
 ### EXE release
