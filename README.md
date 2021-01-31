@@ -63,7 +63,7 @@ There are many other features, explore our bot to find out. ;-)
 
 ## Installation
 ### EXE release
-Download the *exe* release of the app by clicking [here](link-to-github-release).
+Download the *exe* release of the app by clicking [here](https://github.com/amalthomas-exe/Wall-E/releases/download/1.0/Wall-E.Setup.exe).
 
 ### Using Git
 Type the following command in your Git Bash:
