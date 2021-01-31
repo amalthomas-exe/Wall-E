@@ -68,7 +68,7 @@ def check_reminder():
                 conn.commit()
                 conn.close()
                 from plyer import notification
-                notification.notify(title="Reminder from Wall-E",message=f"You asked me to remind you to `{i[0]}` now.",app_name="Wall-E",app_icon="images\\icon.ico",timeout = 15)
+                notification.notify(title="Reminder from Wall-E",message=f"You asked me to remind you to `{i[0]}` now.",app_name="Wall-E",app_icon="icon.ico",timeout = 15)
 
 
 def check_for_connection():
@@ -168,6 +168,8 @@ if check_for_connection():
 
         if bot_response!=[] and bot_response[-1]=="mail-with-id":
             import yagmail
+            print(cryptocode.decrypt(dict2["email"],key))
+            print(cryptocode.decrypt(dict2["password"],key))
             mailer = yagmail.SMTP(cryptocode.decrypt(dict2["email"],key),cryptocode.decrypt(dict2["password"],key))
             try:
                 mailer.send(mail_addr,"Message from "+cryptocode.decrypt(dict2["first-name"],key),userText)
