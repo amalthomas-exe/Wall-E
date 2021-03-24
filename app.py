@@ -12,9 +12,9 @@ import sqlite3
 import os
 from multiprocessing import Process
 import urllib.request
-##danger zone below, editing the key even by one word will render the app useless
+##Danger zone below, editing the key even by one word will render the app useless
 key = "nhdjhvfjnvhfjdfnvhfjdfnhfjdjhhjrhkjhjjgblkbgth"
-##danger zone above, editing the key even by one word will render the app useless
+##Danger zone above, editing the key even by one word will render the app useless
 now = datetime.now().strftime("%H:%M")
 bot_response = []
 
