@@ -14,7 +14,7 @@ from multiprocessing import Process
 import urllib.request
 ##Danger zone below, editing the key even by one word will render the app useless
 key = "nhdjhvfjnvhfjdfnvhfjdfnhfjdjhhjrhkjhjjgblkbgth"
-##Danger zone above, editing the key even by one word will render the app useless
+##Danger zone above, editing the key even by one word will render the app useless.
 now = datetime.now().strftime("%H:%M")
 bot_response = []
 
