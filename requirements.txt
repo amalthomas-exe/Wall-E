@@ -23,3 +23,5 @@ yagmail == 0.14.245
 keyring
 
 gevent
+
+cryptocode
