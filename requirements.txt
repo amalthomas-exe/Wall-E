@@ -1,4 +1,4 @@
-Flask == 1.1.2
+Flask
 
 beautifulsoup4 == 4.9.1
 
